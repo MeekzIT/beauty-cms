@@ -1,46 +1,26 @@
-import "./style/dark.scss";
-import {useContext, useEffect} from "react";
-import {DarkModeContext} from "./context/darkModeContext";
-import Home from "./layouts/Home/Home";
-import {useDispatch} from "react-redux"
-import {token} from "./config/config";
-import {thchangeAuAC} from "./store/actions/authAction";
-import {useLocation} from "react-router-dom";
-import {createMuiTheme, ThemeProvider} from "@mui/material";
-
-
-const theme = createMuiTheme({
-    palette: {
-        secondary: {
-            main: '#1A1940'
-        }
-    }
-});
-
+import React, { useEffect } from "react";
+import MainLayout from "./containers/layout/layout";
+import { useDispatch } from "react-redux";
+import { getMe, setAuthAction } from "./store/actions/auth-action";
+import { useNavigate } from "react-router-dom";
+import { LOGIN_PAGE } from "./routing/pats";
 
 function App() {
-    const dispatch = useDispatch()
-    const {darkMode} = useContext(DarkModeContext);
-    const {pathname} = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  useEffect(() => {
+    const isAuth = JSON.parse(localStorage.getItem("isAuth"));
+    if (isAuth) {
+      dispatch(setAuthAction(true));
+      dispatch(getMe());
+    } else navigate(LOGIN_PAGE);
+  }, []);
 
-    useEffect(() => {
-        setTimeout(() => {
-            window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
-        }, 100)
-        // console.clear()
-    }, [pathname]);
-
-    useEffect(() => {
-        token !== null && dispatch(thchangeAuAC(true));
-    }, [])
-
-    return (
-        <ThemeProvider theme={theme}>
-            <div className={darkMode ? "app dark" : "app"}>
-                <Home/>
-            </div>
-        </ThemeProvider>
-    );
+  return (
+    <div>
+      <MainLayout />
+    </div>
+  );
 }
 
 export default App;

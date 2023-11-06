@@ -1,0 +1,240 @@
+import axios from "axios";
+import { keys } from "../../keys";
+import {
+  ADD_SERVICES,
+  ADD_USER,
+  DELETE_SERVICES,
+  DELETE_USER,
+  EDIT_SERVICES,
+  GET_RESULTS,
+  GET_SERVICES,
+  GET_USERS,
+} from "../types";
+import Swal from "sweetalert2";
+
+export const getUsers = () => {
+  return (dispatch) => {
+    axios
+      .get(`${keys.api}/user`, {
+        headers: {
+          Authorization: `Bearer ${keys.token}`,
+        },
+      })
+      .then((response) => {
+        dispatch({
+          type: GET_USERS,
+          payload: {
+            data: response.data.data,
+          },
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+};
+
+export const deleteUser = (data) => {
+  return (dispatch) => {
+    axios
+      .post(
+        `${keys.api}/user/destroy`,
+        { id: data },
+        {
+          headers: {
+            Authorization: `Bearer ${keys.token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        if (response.data.succes) {
+          dispatch({
+            type: DELETE_USER,
+            payload: data,
+          });
+        } else
+          Swal.fire({
+            position: "center",
+            iconColor: "#1d37de",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+};
+
+export const addUser = (data) => {
+  return (dispatch) => {
+    axios
+      .post(`${keys.api}/user`, data, {
+        headers: {
+          Authorization: `Bearer ${keys.token}`,
+        },
+      })
+      .then(function (response) {
+        if (response.data.succes) {
+          dispatch({
+            type: ADD_USER,
+            payload: response.data.data,
+          });
+        } else
+          Swal.fire({
+            position: "center",
+            iconColor: "#1d37de",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+};
+
+export const getServices = (data) => {
+  return (dispatch) => {
+    axios
+      .get(
+        `${keys.api}/user/user-service`,
+        { params: data },
+        {
+          headers: {
+            Authorization: `Bearer ${keys.token}`,
+          },
+        }
+      )
+      .then((response) => {
+        dispatch({
+          type: GET_SERVICES,
+          payload: {
+            data: response.data,
+          },
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+};
+
+export const deleteService = (data) => {
+  return (dispatch) => {
+    axios
+      .post(
+        `${keys.api}/user/destroy-user-service`,
+        { id: data },
+        {
+          headers: {
+            Authorization: `Bearer ${keys.token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        if (response.data.succes) {
+          dispatch({
+            type: DELETE_SERVICES,
+            payload: data,
+          });
+        } else
+          Swal.fire({
+            position: "center",
+            iconColor: "#1d37de",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+};
+
+export const editService = (data) => {
+  return (dispatch) => {
+    axios
+      .post(`${keys.api}/user/edit-user-service`, data, {
+        headers: {
+          Authorization: `Bearer ${keys.token}`,
+        },
+      })
+      .then(function (response) {
+        if (response.data.succes) {
+          dispatch({
+            type: EDIT_SERVICES,
+            payload: response.data.data,
+          });
+        } else
+          Swal.fire({
+            position: "center",
+            iconColor: "#1d37de",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+};
+
+export const addService = (data) => {
+  return (dispatch) => {
+    axios
+      .post(`${keys.api}/user/add-user-service`, data, {
+        headers: {
+          Authorization: `Bearer ${keys.token}`,
+        },
+      })
+      .then(function (response) {
+        if (response.data.succes) {
+          dispatch({
+            type: ADD_SERVICES,
+            payload: response.data.data,
+          });
+        } else
+          Swal.fire({
+            position: "center",
+            iconColor: "#1d37de",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+};
+
+export const getResults = (data) => {
+  return (dispatch) => {
+    axios
+      .get(
+        `${keys.api}/user/calc-service`,
+        { params: data },
+        {
+          headers: {
+            Authorization: `Bearer ${keys.token}`,
+          },
+        }
+      )
+      .then((response) => {
+        dispatch({
+          type: GET_RESULTS,
+          payload: {
+            data: response.data.date,
+          },
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+};

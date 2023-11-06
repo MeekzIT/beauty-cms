@@ -1,20 +1,31 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import {Provider} from "react-redux";
-import {BrowserRouter} from "react-router-dom";
+import ReactDOM from "react-dom/client";
 import App from "./App";
-import {DarkModeContextProvider} from "./context/darkModeContext";
-import store from "./store/store";
-import ScrollToTop from "./utils/scroll/scroll";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import { store } from "./store/index";
+import { createTheme } from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
 
-ReactDOM.render(
-    <BrowserRouter>
-        {/*<ScrollToTop/>*/}
-        <Provider store={store}>
-            <DarkModeContextProvider>
-                <App/>
-            </DarkModeContextProvider>
-        </Provider>
-    </BrowserRouter>,
-    document.getElementById("root")
+import "./index.css";
+import ScrollToTop from "./components/scroll-to-top/ScrollToTop";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#1d37de",
+    },
+  },
+});
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <BrowserRouter>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <ScrollToTop />
+        <App />
+      </ThemeProvider>
+    </Provider>
+  </BrowserRouter>
 );
