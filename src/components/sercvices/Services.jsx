@@ -6,25 +6,28 @@ import { TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { editService } from "../../store/actions/user-action";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+import { useIsMobile } from "../../hooks/useScreenType";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Services = ({ open, setClose, data }) => {
   const dispatch = useDispatch();
   const [name, setName] = useState();
   const [price, setPrice] = useState();
   const [benefit, setBenefit] = useState();
+  const isMobile = useIsMobile();
 
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: isMobile ? "100%" : 400,
+    height: isMobile ? "50vh" : null,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
   useEffect(() => {
     setName(data?.name);
     setPrice(data?.price);
@@ -43,6 +46,14 @@ const Services = ({ open, setClose, data }) => {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
+        <div
+          className="clone_btn"
+          onClick={() => {
+            setClose(false);
+          }}
+        >
+          <CloseIcon />
+        </div>
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Ծառայություներ
         </Typography>

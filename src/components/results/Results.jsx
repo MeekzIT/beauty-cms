@@ -11,25 +11,28 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useParams } from "react-router-dom";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+import { useIsMobile } from "../../hooks/useScreenType";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Results = ({ open, setClose, all }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [value, setValue] = useState(null);
   const data = useSelector((state) => state.users.results);
+  const isMobile = useIsMobile();
 
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: isMobile ? "100%" : 400,
+    height: isMobile ? "50vh" : null,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
   useEffect(() => {
     all
       ? dispatch(
@@ -54,11 +57,19 @@ const Results = ({ open, setClose, all }) => {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
+        <div
+          className="clone_btn"
+          onClick={() => {
+            setClose(false);
+          }}
+        >
+          <CloseIcon />
+        </div>
+        <Typography p={2} id="modal-modal-title" variant="h6" component="h2">
           Արդյունքներ
         </Typography>
 
-        <Box mt={2}>
+        <Box mt={2} p={2}>
           <Box>
             <Box>
               <LocalizationProvider dateAdapter={AdapterDayjs}>

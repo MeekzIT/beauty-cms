@@ -126,3 +126,9 @@ body {
   color: maroon;
   font-size: 25px;
 }
+
+.clone_btn{
+  position: absolute;
+  right:10%;
+  top:5%;
+}
