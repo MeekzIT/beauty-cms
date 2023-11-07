@@ -94,7 +94,9 @@ const Results = ({ open, setClose, all }) => {
           <Box>
             <Typography component="h3">Ամբողջական - {data?.all} ֏</Typography>
             <Typography component="h3">Օգուտ - {data?.cantora} ֏</Typography>
-            <Typography component="h3">Ծախսեր - {data?.benefit} ֏</Typography>
+            <Typography component="h3">
+              Աշխատավարձ - {data?.benefit} ֏
+            </Typography>
           </Box>
         </Box>
       </Box>

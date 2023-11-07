@@ -3,6 +3,7 @@ import {
   ADD_USER,
   DELETE_SERVICES,
   DELETE_USER,
+  DENGER_DELETE,
   EDIT_SERVICES,
   GET_RESULTS,
   GET_SERVICES,
@@ -53,6 +54,13 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         results: action.payload.data,
+      };
+    case DENGER_DELETE:
+      return {
+        ...state,
+        users: null,
+        services: null,
+        results: null,
       };
     default:
       return state;

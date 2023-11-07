@@ -9,7 +9,11 @@ import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteService, getServices } from "../../store/actions/user-action";
+import {
+  deleteService,
+  getServices,
+  getUser,
+} from "../../store/actions/user-action";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Services from "../../components/sercvices/Services";
@@ -39,6 +43,7 @@ const User = () => {
   const handleOpen = () => setOpen(true);
   const data = useSelector((state) => state.users.services);
   const role = useSelector((state) => state.auth.isSuper);
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     dispatch(
@@ -50,11 +55,15 @@ const User = () => {
   }, [value]);
 
   useEffect(() => {
+    dispatch(getUser({ id }));
     dispatch(getMe());
   }, []);
-
+  console.log(user);
   return (
     <Box>
+      <Box p={2}>
+        <h1>{user?.name}</h1>
+      </Box>
       <Box
         p={2}
         sx={{
@@ -70,28 +79,13 @@ const User = () => {
             Վերադառնալ
           </Button>
         </Box>
-        <Box>
-          <Button variant="outlined" onClick={() => setSetAdd(true)}>
-            <AddIcon /> Ավելացնել
-          </Button>
-        </Box>
         {role === "superAdmin" && (
           <Box>
-            <Button variant="outlined" onClick={() => setResults(true)}>
-              <CalculateIcon /> Դիտել արդյունքները
+            <Button variant="outlined" onClick={() => setSetAdd(true)}>
+              <AddIcon /> Ավելացնել
             </Button>
           </Box>
         )}
-        <Box>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={["DatePicker"]}>
-              <DatePicker
-                value={value}
-                onChange={(newValue) => setValue(newValue.format("YYYY-MM-DD"))}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
-        </Box>
         <Box>
           {value && (
             <Button variant="outlined" onClick={() => setValue(null)}>
@@ -110,8 +104,12 @@ const User = () => {
                   <TableCell align="left">Գին</TableCell>
                   <TableCell align="left">Աշխատողի աշխատանքը</TableCell>
                   <TableCell align="left">Ամսաթիվ</TableCell>
-                  <TableCell align="left">Խմբագրել</TableCell>
-                  <TableCell align="left">Ջնջել</TableCell>
+                  {role === "superAdmin" && (
+                    <TableCell align="left">Խմբագրել</TableCell>
+                  )}
+                  {role === "superAdmin" && (
+                    <TableCell align="left">Ջնջել</TableCell>
+                  )}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -133,27 +131,32 @@ const User = () => {
                         {row.benefit} ֏
                       </TableCell>{" "}
                       <TableCell component="th" scope="row" align="left">
-                        {row.createdAt.slice(0, 10)}
+                        {row.createdAt.slice(0, 10)}{" "}
+                        {row.createdAt.slice(11, 16)}
                       </TableCell>
-                      <TableCell component="th" scope="row" align="left">
-                        <Button
-                          variant="contained"
-                          onClick={() => {
-                            setCurrent(row);
-                            handleOpen();
-                          }}
-                        >
-                          <EditIcon />
-                        </Button>
-                      </TableCell>
-                      <TableCell component="th" scope="row" align="left">
-                        <Button
-                          variant="outlined"
-                          onClick={() => dispatch(deleteService(row.id))}
-                        >
-                          <DeleteIcon />
-                        </Button>
-                      </TableCell>
+                      {role === "superAdmin" && (
+                        <TableCell component="th" scope="row" align="left">
+                          <Button
+                            variant="contained"
+                            onClick={() => {
+                              setCurrent(row);
+                              handleOpen();
+                            }}
+                          >
+                            <EditIcon />
+                          </Button>
+                        </TableCell>
+                      )}
+                      {role === "superAdmin" && (
+                        <TableCell component="th" scope="row" align="left">
+                          <Button
+                            variant="outlined"
+                            onClick={() => dispatch(deleteService(row.id))}
+                          >
+                            <DeleteIcon />
+                          </Button>
+                        </TableCell>
+                      )}
                     </TableRow>
                   ))
                 ) : (

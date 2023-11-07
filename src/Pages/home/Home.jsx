@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteUser, getUsers } from "../../store/actions/user-action";
+import {
+  deleteUser,
+  dengerDelete,
+  getUsers,
+} from "../../store/actions/user-action";
 import { Box, Button } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -16,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { getMe } from "../../store/actions/auth-action";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import Results from "../../components/results/Results";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -54,6 +59,17 @@ const Home = () => {
             </Button>
           </Box>
         )}
+        {role === "superAdmin" && (
+          <Box>
+            <Button
+              variant="outlined"
+              onClick={() => dispatch(dengerDelete())}
+              sx={{ color: "red", borderColor: "red" }}
+            >
+              <DeleteForeverIcon sx={{ color: "red" }} /> Ջնջել բոլոր տվյալները
+            </Button>
+          </Box>
+        )}
       </Box>
       <Box sx={{ overflow: "auto" }}>
         <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
@@ -62,7 +78,7 @@ const Home = () => {
               <TableHead>
                 <TableRow>
                   <TableCell align="left">Անուն</TableCell>
-                  <TableCell align="left">Ավելացնել Ծառայություն</TableCell>
+                  <TableCell align="left">Ծառայություններ</TableCell>
                   <TableCell align="left">Ջնջել</TableCell>
                 </TableRow>
               </TableHead>

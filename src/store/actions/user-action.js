@@ -5,9 +5,11 @@ import {
   ADD_USER,
   DELETE_SERVICES,
   DELETE_USER,
+  DENGER_DELETE,
   EDIT_SERVICES,
   GET_RESULTS,
   GET_SERVICES,
+  GET_USER,
   GET_USERS,
 } from "../types";
 import Swal from "sweetalert2";
@@ -23,6 +25,32 @@ export const getUsers = () => {
       .then((response) => {
         dispatch({
           type: GET_USERS,
+          payload: {
+            data: response.data.data,
+          },
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+};
+
+export const getUser = (data) => {
+  return (dispatch) => {
+    axios
+      .get(
+        `${keys.api}/user/single`,
+        { params: data },
+        {
+          headers: {
+            Authorization: `Bearer ${keys.token}`,
+          },
+        }
+      )
+      .then((response) => {
+        dispatch({
+          type: GET_USER,
           payload: {
             data: response.data.data,
           },
@@ -234,6 +262,38 @@ export const getResults = (data) => {
         });
       })
       .catch((error) => {
+        console.error(error);
+      });
+  };
+};
+
+export const dengerDelete = () => {
+  return (dispatch) => {
+    axios
+      .post(
+        `${keys.api}/admin/destroyAll`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${keys.token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        if (response.data.succes) {
+          dispatch({
+            type: DENGER_DELETE,
+          });
+        } else
+          Swal.fire({
+            position: "center",
+            iconColor: "#1d37de",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+      })
+      .catch(function (error) {
         console.error(error);
       });
   };

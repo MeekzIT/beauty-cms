@@ -1,10 +1,11 @@
-import { GET_ME, SET_AUTH } from "../types";
+import { GET_ME, GET_USER, SET_AUTH } from "../types";
 import { LOGIN_ACTION } from "../types";
 
 const initialState = {
   isAuth: false,
   admin: null,
   isSuper: false,
+  user: null,
 };
 
 export const isAuthReducer = (state = initialState, action) => {
@@ -28,7 +29,11 @@ export const isAuthReducer = (state = initialState, action) => {
         admin: action.payload.data,
         isSuper: action.payload.isSuper,
       };
-
+    case GET_USER:
+      return {
+        ...state,
+        user: action.payload.data,
+      };
     default:
       return state;
   }
