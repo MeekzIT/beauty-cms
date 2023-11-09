@@ -16,3 +16,5 @@ export const GET_WORKS = "GET_WORKS";
 export const ADD_WORKS = "ADD_WORKS";
 export const DELETE_WORKS = "DELETE_WORKS";
 export const EDIT_WORK = "EDIT_WORK";
+export const GET_ACCESS_WORKS = "GET_ACCESS_WORKS";
+export const DELETE_ACCESS_WORKS = "DELETE_ACCESS_WORKS";

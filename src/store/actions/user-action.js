@@ -4,11 +4,13 @@ import {
   ADD_SERVICES,
   ADD_USER,
   ADD_WORKS,
+  DELETE_ACCESS_WORKS,
   DELETE_SERVICES,
   DELETE_USER,
   DELETE_WORKS,
   DENGER_DELETE,
   EDIT_SERVICES,
+  GET_ACCESS_WORKS,
   GET_RESULTS,
   GET_SERVICES,
   GET_USER,
@@ -249,12 +251,12 @@ export const getResults = (data) => {
     axios
       .get(
         `${keys.api}/user/calc-service`,
-        { params: data },
         {
           headers: {
             Authorization: `Bearer ${keys.token}`,
           },
-        }
+        },
+        { params: data }
       )
       .then((response) => {
         dispatch({
@@ -307,12 +309,12 @@ export const getWorks = (data) => {
     axios
       .get(
         `${keys.api}/user/get-user-work`,
-        { params: data },
         {
           headers: {
             Authorization: `Bearer ${keys.token}`,
           },
-        }
+        },
+        { params: data }
       )
       .then((response) => {
         dispatch({
@@ -357,7 +359,7 @@ export const addWork = (data) => {
   };
 };
 
-export const deleteWork = (data) => {
+export const deleteWork = (data, role) => {
   return (dispatch) => {
     axios
       .post(
@@ -372,7 +374,7 @@ export const deleteWork = (data) => {
       .then(function (response) {
         if (response.data.succes) {
           dispatch({
-            type: DELETE_WORKS,
+            type: role == "admin" ? DELETE_WORKS : DELETE_ACCESS_WORKS,
             payload: data,
           });
         } else
@@ -385,6 +387,32 @@ export const deleteWork = (data) => {
           });
       })
       .catch(function (error) {
+        console.error(error);
+      });
+  };
+};
+
+export const getAccessWorks = (data) => {
+  return (dispatch) => {
+    axios
+      .get(
+        `${keys.api}/user/get-user-access-work`,
+        {
+          headers: {
+            Authorization: `Bearer ${keys.token}`,
+          },
+        },
+        { params: data }
+      )
+      .then((response) => {
+        dispatch({
+          type: GET_ACCESS_WORKS,
+          payload: {
+            data: response.data.date,
+          },
+        });
+      })
+      .catch((error) => {
         console.error(error);
       });
   };

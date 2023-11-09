@@ -2,12 +2,14 @@ import {
   ADD_SERVICES,
   ADD_USER,
   ADD_WORKS,
+  DELETE_ACCESS_WORKS,
   DELETE_SERVICES,
   DELETE_USER,
   DELETE_WORKS,
   DENGER_DELETE,
   EDIT_SERVICES,
   EDIT_WORK,
+  GET_ACCESS_WORKS,
   GET_RESULTS,
   GET_SERVICES,
   GET_USERS,
@@ -19,6 +21,7 @@ const initialState = {
   services: null,
   results: null,
   work: null,
+  accessWorks: null,
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -89,6 +92,16 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         work: edited,
+      };
+    case GET_ACCESS_WORKS:
+      return {
+        ...state,
+        accessWorks: action.payload.data,
+      };
+    case DELETE_ACCESS_WORKS:
+      return {
+        ...state,
+        accessWorks: state.accessWorks.filter((i) => i.id !== action.payload),
       };
     default:
       return state;

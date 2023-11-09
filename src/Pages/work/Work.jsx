@@ -81,7 +81,7 @@ const Work = () => {
             Վերադառնալ
           </Button>
         </Box>
-        {role === "superAdmin" && (
+        {role === "admin" && (
           <Box>
             <Button variant="outlined" onClick={() => setSetAdd(true)}>
               <AddIcon /> Ավելացնել
@@ -127,7 +127,7 @@ const Work = () => {
                   <TableCell align="left">Գին</TableCell>
                   <TableCell align="left">Աշխատողի աշխատանքը</TableCell>
                   <TableCell align="left">Ամսաթիվ</TableCell>
-                  {role === "superAdmin" && (
+                  {role === "admin" && (
                     <TableCell align="left">Ջնջել</TableCell>
                   )}
                 </TableRow>
@@ -154,13 +154,13 @@ const Work = () => {
                         {row.createdAt.slice(0, 10)}{" "}
                         {row.createdAt.slice(11, 16)}
                       </TableCell>
-                      {role === "superAdmin" && (
+                      {role === "admin" && (
                         <TableCell component="th" scope="row" align="left">
                           <Button
                             variant="outlined"
-                            onClick={() => dispatch(deleteWork(row.id))}
+                            onClick={() => dispatch(deleteWork(row.id, role))}
                           >
-                            <DeleteIcon />
+                            <DeleteIcon sx={{ color: "red" }} />
                           </Button>
                         </TableCell>
                       )}
