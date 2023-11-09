@@ -11,8 +11,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   deleteService,
+  deleteWork,
   getServices,
   getUser,
+  getWorks,
 } from "../../store/actions/user-action";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -29,8 +31,9 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import Results from "../../components/results/Results";
 import { getMe } from "../../store/actions/auth-action";
+import AddWork from "../../components/addWork/AddWork";
 
-const User = () => {
+const Work = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -41,13 +44,13 @@ const User = () => {
 
   const [value, setValue] = useState(null);
   const handleOpen = () => setOpen(true);
-  const data = useSelector((state) => state.users.services);
+  const data = useSelector((state) => state.users.work);
   const role = useSelector((state) => state.auth.isSuper);
   const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     dispatch(
-      getServices({
+      getWorks({
         userId: id,
         date: value,
       })
@@ -61,7 +64,7 @@ const User = () => {
   return (
     <Box>
       <Box p={2}>
-        <h1>Ծառայություններ` {user?.name}</h1>
+        <h1>Աշխատանքներ` {user?.name}</h1>
       </Box>
       <Box
         p={2}
@@ -85,6 +88,34 @@ const User = () => {
             </Button>
           </Box>
         )}
+        {role === "superAdmin" && (
+          <Box>
+            <Button variant="outlined" onClick={() => setResults(true)}>
+              <CalculateIcon /> Դիտել արդյունքները
+            </Button>
+          </Box>
+        )}
+        {role === "superAdmin" && (
+          <Box>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DatePicker"]}>
+                <DatePicker
+                  value={value}
+                  onChange={(newValue) =>
+                    setValue(newValue.format("YYYY-MM-DD"))
+                  }
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+          </Box>
+        )}
+        <Box>
+          {value && (
+            <Button variant="outlined" onClick={() => setValue(null)}>
+              <FilterAltOffIcon /> Ջնջել ամսաթվի ֆիլտրը
+            </Button>
+          )}
+        </Box>
       </Box>
       <Box sx={{ overflow: "auto" }}>
         <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
@@ -92,13 +123,10 @@ const User = () => {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell align="left">Անուն</TableCell>
+                  <TableCell align="left">Աշխատանքի տեսակը</TableCell>
                   <TableCell align="left">Գին</TableCell>
                   <TableCell align="left">Աշխատողի աշխատանքը</TableCell>
                   <TableCell align="left">Ամսաթիվ</TableCell>
-                  {role === "superAdmin" && (
-                    <TableCell align="left">Խմբագրել</TableCell>
-                  )}
                   {role === "superAdmin" && (
                     <TableCell align="left">Ջնջել</TableCell>
                   )}
@@ -114,13 +142,13 @@ const User = () => {
                       }}
                     >
                       <TableCell component="th" scope="row" align="left">
-                        {row.name}
+                        {row?.Service?.name}
                       </TableCell>
                       <TableCell component="th" scope="row" align="left">
-                        {row.price} ֏
+                        {row?.Service?.price} ֏
                       </TableCell>{" "}
                       <TableCell component="th" scope="row" align="left">
-                        {row.benefit} ֏
+                        {row?.Service?.benefit} ֏
                       </TableCell>{" "}
                       <TableCell component="th" scope="row" align="left">
                         {row.createdAt.slice(0, 10)}{" "}
@@ -129,21 +157,8 @@ const User = () => {
                       {role === "superAdmin" && (
                         <TableCell component="th" scope="row" align="left">
                           <Button
-                            variant="contained"
-                            onClick={() => {
-                              setCurrent(row);
-                              handleOpen();
-                            }}
-                          >
-                            <EditIcon />
-                          </Button>
-                        </TableCell>
-                      )}
-                      {role === "superAdmin" && (
-                        <TableCell component="th" scope="row" align="left">
-                          <Button
                             variant="outlined"
-                            onClick={() => dispatch(deleteService(row.id))}
+                            onClick={() => dispatch(deleteWork(row.id))}
                           >
                             <DeleteIcon />
                           </Button>
@@ -170,11 +185,11 @@ const User = () => {
           </TableContainer>
         </Box>
         <Services open={open} setClose={setOpen} data={current} />
-        <AddServices open={add} setClose={setSetAdd} />
+        <AddWork open={add} setClose={setSetAdd} />
         <Results open={results} setClose={setResults} all={false} />
       </Box>
     </Box>
   );
 };
 
-export default User;
+export default Work;

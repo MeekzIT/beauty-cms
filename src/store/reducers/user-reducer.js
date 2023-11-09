@@ -1,19 +1,24 @@
 import {
   ADD_SERVICES,
   ADD_USER,
+  ADD_WORKS,
   DELETE_SERVICES,
   DELETE_USER,
+  DELETE_WORKS,
   DENGER_DELETE,
   EDIT_SERVICES,
+  EDIT_WORK,
   GET_RESULTS,
   GET_SERVICES,
   GET_USERS,
+  GET_WORKS,
 } from "../types";
 
 const initialState = {
   users: null,
   services: null,
   results: null,
+  work: null,
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -61,6 +66,29 @@ export const userReducer = (state = initialState, action) => {
         users: null,
         services: null,
         results: null,
+      };
+    case GET_WORKS:
+      return {
+        ...state,
+        work: action.payload.data,
+      };
+    case ADD_WORKS:
+      return {
+        ...state,
+        work: [...state.work, action.payload],
+      };
+    case DELETE_WORKS:
+      return {
+        ...state,
+        work: state.work.filter((i) => i.id !== action.payload),
+      };
+    case EDIT_WORK:
+      const edited = state.work.map((i) =>
+        i.id == action.payload.id ? action.payload : i
+      );
+      return {
+        ...state,
+        work: edited,
       };
     default:
       return state;

@@ -3,14 +3,17 @@ import { keys } from "../../keys";
 import {
   ADD_SERVICES,
   ADD_USER,
+  ADD_WORKS,
   DELETE_SERVICES,
   DELETE_USER,
+  DELETE_WORKS,
   DENGER_DELETE,
   EDIT_SERVICES,
   GET_RESULTS,
   GET_SERVICES,
   GET_USER,
   GET_USERS,
+  GET_WORKS,
 } from "../types";
 import Swal from "sweetalert2";
 
@@ -283,6 +286,94 @@ export const dengerDelete = () => {
         if (response.data.succes) {
           dispatch({
             type: DENGER_DELETE,
+          });
+        } else
+          Swal.fire({
+            position: "center",
+            iconColor: "#1d37de",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+};
+
+export const getWorks = (data) => {
+  return (dispatch) => {
+    axios
+      .get(
+        `${keys.api}/user/get-user-work`,
+        { params: data },
+        {
+          headers: {
+            Authorization: `Bearer ${keys.token}`,
+          },
+        }
+      )
+      .then((response) => {
+        dispatch({
+          type: GET_WORKS,
+          payload: {
+            data: response.data.date,
+          },
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+};
+
+export const addWork = (data) => {
+  return (dispatch) => {
+    axios
+      .post(`${keys.api}/user/add-user-work`, data, {
+        headers: {
+          Authorization: `Bearer ${keys.token}`,
+        },
+      })
+      .then(function (response) {
+        if (response.data.succes) {
+          dispatch({
+            type: ADD_WORKS,
+            payload: response.data.data,
+          });
+        } else
+          Swal.fire({
+            position: "center",
+            iconColor: "#1d37de",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+};
+
+export const deleteWork = (data) => {
+  return (dispatch) => {
+    axios
+      .post(
+        `${keys.api}/user/destroy-user-work`,
+        { id: data },
+        {
+          headers: {
+            Authorization: `Bearer ${keys.token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        if (response.data.succes) {
+          dispatch({
+            type: DELETE_WORKS,
+            payload: data,
           });
         } else
           Swal.fire({

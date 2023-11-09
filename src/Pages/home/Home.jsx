@@ -21,6 +21,7 @@ import { getMe } from "../../store/actions/auth-action";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import Results from "../../components/results/Results";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -79,6 +80,7 @@ const Home = () => {
                 <TableRow>
                   <TableCell align="left">Անուն</TableCell>
                   <TableCell align="left">Ծառայություններ</TableCell>
+                  <TableCell align="left">Աշխատանքներ</TableCell>
                   <TableCell align="left">Ջնջել</TableCell>
                 </TableRow>
               </TableHead>
@@ -98,6 +100,17 @@ const Home = () => {
                         variant="outlined"
                         onClick={() => {
                           navigate(`/user/${row.id}`);
+                        }}
+                      >
+                        <VisibilityIcon />
+                        Դիտել
+                      </Button>
+                    </TableCell>
+                    <TableCell component="th" scope="row" align="left">
+                      <Button
+                        variant="outlined"
+                        onClick={() => {
+                          navigate(`/work/${row.id}`);
                         }}
                       >
                         <AddIcon />

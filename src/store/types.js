@@ -12,3 +12,7 @@ export const EDIT_SERVICES = "EDIT_SERVICES";
 export const ADD_SERVICES = "ADD_SERVICES";
 export const GET_RESULTS = "GET_RESULTS";
 export const DENGER_DELETE = "DENGER_DELETE";
+export const GET_WORKS = "GET_WORKS";
+export const ADD_WORKS = "ADD_WORKS";
+export const DELETE_WORKS = "DELETE_WORKS";
+export const EDIT_WORK = "EDIT_WORK";
