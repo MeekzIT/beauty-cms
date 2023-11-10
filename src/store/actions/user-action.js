@@ -283,7 +283,6 @@ export const getResults = (data) => {
     axios
       .get(`${keys.api}/user/calc-service`, {
         params: data,
-
         headers: {
           Authorization: `Bearer ${keys.token}`,
         },

@@ -9,7 +9,7 @@ import { addUser } from "../../store/actions/user-action";
 import { useIsMobile } from "../../hooks/useScreenType";
 import CloseIcon from "@mui/icons-material/Close";
 
-const UserModal = ({ open, setClose }) => {
+const UserModal = ({ open, setClose, type }) => {
   const dispatch = useDispatch();
   const [name, setName] = useState("");
   const isMobile = useIsMobile();
@@ -58,7 +58,7 @@ const UserModal = ({ open, setClose }) => {
             variant="contained"
             onClick={() => {
               if (name !== "") {
-                dispatch(addUser({ name: name }));
+                dispatch(addUser({ name: name, type }));
                 setClose(false);
               }
             }}

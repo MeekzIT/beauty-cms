@@ -27,14 +27,18 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import { ALL_WORK_PAGE } from "../../routing/pats";
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [results, setResults] = useState(false);
-
-  const handleOpen = () => setOpen(true);
+  const [type, setType] = useState(null);
+  const handleOpen = (data) => {
+    setType(data);
+    setOpen(true);
+  };
   const data = useSelector((state) => state.users.users);
   const role = useSelector((state) => state.auth.isSuper);
 
@@ -54,16 +58,28 @@ const Home = () => {
           flexWrap: "wrap",
         }}
       >
-        <Button variant="outlined" onClick={handleOpen}>
-          <AddIcon />
-          Ավելացնել
-        </Button>
-        {role === "superAdmin" && (
+        {role === "superAdmin" ? (
           <Box>
             <Button variant="outlined" onClick={() => setResults(true)}>
               <CalculateIcon /> Դիտել արդյունքները
             </Button>
           </Box>
+        ) : (
+          <>
+            <Box>
+              <Button
+                variant="outlined"
+                onClick={() => navigate(ALL_WORK_PAGE)}
+              >
+                Աշխատանք
+              </Button>
+            </Box>
+            <Box>
+              <Button variant="outlined">
+                <CalculateIcon /> Դիտել արդյունքները
+              </Button>
+            </Box>
+          </>
         )}
         {role === "superAdmin" && (
           <Box>
@@ -77,119 +93,284 @@ const Home = () => {
           </Box>
         )}
       </Box>
-      {/* <Box sx={{ overflow: "auto" }}>
-        <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="left">Անուն</TableCell>
-                  <TableCell align="left">Ծառայություններ</TableCell>
-                  <TableCell align="left">Աշխատանքներ</TableCell>
-                  <TableCell align="left">Ջնջել</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data?.map((row) => (
-                  <TableRow
-                    key={row.modeName}
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 },
-                    }}
-                  >
-                    <TableCell component="th" scope="row" align="left">
+      <Box p={2}>
+        <Box>
+          <Typography gutterBottom variant="h5" component="div">
+            Վարսահարդար
+          </Typography>
+        </Box>
+        {role == "superAdmin" && (
+          <Box
+            p={2}
+            sx={{
+              display: "flex",
+              gap: "15px",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <Box>
+              <Button variant="outlined" onClick={() => handleOpen(1)}>
+                <AddIcon />
+                Ավելացնել
+              </Button>
+            </Box>
+          </Box>
+        )}
+
+        <Box
+          sx={{
+            display: "flex",
+            padding: "15px",
+            gap: "10px",
+            flexWrap: "wrap",
+          }}
+        >
+          {data?.map(
+            (row) =>
+              row.type == 1 && (
+                <Card
+                  sx={{
+                    width: 300,
+                    backgroundColor: "whitesmoke",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => role == "admin" && navigate(`/work/${row.id}`)}
+                >
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
                       {row.name}
-                    </TableCell>
-                    <TableCell component="th" scope="row" align="left">
+                    </Typography>
+                  </CardContent>
+                  {role == "superAdmin" && (
+                    <CardActions
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "10px",
+                      }}
+                    >
+                      {/* <Button
+                        fullWidth
+                        variant="contained"
+                        onClick={() => {
+                          navigate(`/work/${row.id}`);
+                        }}
+                      >
+                        <AddIcon /> Աշխատանքներ
+                      </Button> */}
                       <Button
+                        fullWidth
                         variant="outlined"
                         onClick={() => {
                           navigate(`/user/${row.id}`);
                         }}
                       >
-                        <VisibilityIcon />
-                        Դիտել
+                        <VisibilityIcon /> Ծառայություններ
                       </Button>
-                    </TableCell>
-                    <TableCell component="th" scope="row" align="left">
                       <Button
+                        fullWidth
+                        color="error"
                         variant="outlined"
+                        onClick={() => dispatch(deleteUser(row.id))}
+                      >
+                        <DeleteIcon sx={{ color: "red" }} />
+                      </Button>
+                    </CardActions>
+                  )}
+                </Card>
+              )
+          )}
+        </Box>
+      </Box>
+      <hr />
+
+      {/* -=----------------------------------------------------------------------------------------- */}
+      <Box p={2}>
+        <Box>
+          <Typography gutterBottom variant="h5" component="div">
+            Մատնահարդար
+          </Typography>
+        </Box>
+        {role == "superAdmin" && (
+          <Box
+            p={2}
+            sx={{
+              display: "flex",
+              gap: "15px",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <Box>
+              <Button variant="outlined" onClick={() => handleOpen(2)}>
+                <AddIcon />
+                Ավելացնել
+              </Button>
+            </Box>
+          </Box>
+        )}
+
+        <Box
+          sx={{
+            display: "flex",
+            padding: "15px",
+            gap: "10px",
+            flexWrap: "wrap",
+          }}
+        >
+          {data?.map(
+            (row) =>
+              row.type == 2 && (
+                <Card
+                  sx={{
+                    width: 300,
+                    backgroundColor: "whitesmoke",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => role == "admin" && navigate(`/work/${row.id}`)}
+                >
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {row.name}
+                    </Typography>
+                  </CardContent>
+                  {role == "superAdmin" && (
+                    <CardActions
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "10px",
+                      }}
+                    >
+                      {/* <Button
+                        fullWidth
+                        variant="contained"
                         onClick={() => {
                           navigate(`/work/${row.id}`);
                         }}
                       >
-                        <AddIcon />
-                        Դիտել
-                      </Button>
-                    </TableCell>
-                    <TableCell component="th" scope="row" align="left">
+                        <AddIcon /> Աշխատանքներ
+                      </Button> */}
                       <Button
+                        fullWidth
+                        variant="outlined"
+                        onClick={() => {
+                          navigate(`/user/${row.id}`);
+                        }}
+                      >
+                        <VisibilityIcon /> Ծառայություններ
+                      </Button>
+                      <Button
+                        fullWidth
+                        color="error"
                         variant="outlined"
                         onClick={() => dispatch(deleteUser(row.id))}
                       >
-                        <DeleteIcon />
+                        <DeleteIcon sx={{ color: "red" }} />
                       </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                    </CardActions>
+                  )}
+                </Card>
+              )
+          )}
         </Box>
-      </Box> */}
-      <Box
-        sx={{
-          display: "flex",
-          padding: "15px",
-          gap: "10px",
-          flexWrap: "wrap",
-        }}
-      >
-        {data?.map((row) => (
-          <Card sx={{ width: 300, backgroundColor: "whitesmoke" }}>
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                {row.name}
-              </Typography>
-            </CardContent>
-            <CardActions
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-              }}
-            >
-              <Button
-                fullWidth
-                variant="contained"
-                onClick={() => {
-                  navigate(`/work/${row.id}`);
-                }}
-              >
-                <AddIcon /> Աշխատանքներ
-              </Button>
-              <Button
-                fullWidth
-                variant="outlined"
-                onClick={() => {
-                  navigate(`/user/${row.id}`);
-                }}
-              >
-                <VisibilityIcon /> Ծառայություններ
-              </Button>
-              <Button
-                fullWidth
-                color="error"
-                variant="outlined"
-                onClick={() => dispatch(deleteUser(row.id))}
-              >
-                <DeleteIcon sx={{ color: "red" }} />
-              </Button>
-            </CardActions>
-          </Card>
-        ))}
       </Box>
-      <UserModal open={open} setClose={setOpen} />
+      <hr />
+      {/* -=----------------------------------------------------------------------------------------- */}
+      <Box p={2}>
+        <Box>
+          <Typography gutterBottom variant="h5" component="div">
+            Լուսամազահեռացում
+          </Typography>
+        </Box>
+        {role == "superAdmin" && (
+          <Box
+            p={2}
+            sx={{
+              display: "flex",
+              gap: "15px",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <Box>
+              <Button variant="outlined" onClick={() => handleOpen(3)}>
+                <AddIcon />
+                Ավելացնել
+              </Button>
+            </Box>
+          </Box>
+        )}
+
+        <Box
+          sx={{
+            display: "flex",
+            padding: "15px",
+            gap: "10px",
+            flexWrap: "wrap",
+          }}
+        >
+          {data?.map(
+            (row) =>
+              row.type == 3 && (
+                <Card
+                  sx={{
+                    width: 300,
+                    backgroundColor: "whitesmoke",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => role == "admin" && navigate(`/work/${row.id}`)}
+                >
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {row.name}
+                    </Typography>
+                  </CardContent>
+                  {role == "superAdmin" && (
+                    <CardActions
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "10px",
+                      }}
+                    >
+                      {/* <Button
+                        fullWidth
+                        variant="contained"
+                        onClick={() => {
+                          navigate(`/work/${row.id}`);
+                        }}
+                      >
+                        <AddIcon /> Աշխատանքներ
+                      </Button> */}
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        onClick={() => {
+                          navigate(`/user/${row.id}`);
+                        }}
+                      >
+                        <VisibilityIcon /> Ծառայություններ
+                      </Button>
+                      <Button
+                        fullWidth
+                        color="error"
+                        variant="outlined"
+                        onClick={() => dispatch(deleteUser(row.id))}
+                      >
+                        <DeleteIcon sx={{ color: "red" }} />
+                      </Button>
+                    </CardActions>
+                  )}
+                </Card>
+              )
+          )}
+        </Box>
+      </Box>
+      <hr />
+
+      <UserModal open={open} setClose={setOpen} type={type} />
       <Results open={results} setClose={setResults} all={true} />
     </Box>
   );

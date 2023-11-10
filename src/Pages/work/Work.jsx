@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
+  addWork,
   deleteService,
   deleteWork,
   getServices,
@@ -38,6 +39,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import Swal from "sweetalert2";
 
 const Work = () => {
   const { id } = useParams();
@@ -55,13 +57,14 @@ const Work = () => {
   const data = useSelector((state) => state.users.work);
   const role = useSelector((state) => state.auth.isSuper);
   const user = useSelector((state) => state.auth.user);
+  const services = useSelector((state) => state.users.services);
 
   useEffect(() => {
     !arxive
       ? dispatch(
           getWorks({
             userId: id,
-            date: dayjs().format("YYYY-MM-DD"),
+            // date: dayjs().format("YYYY-MM-DD"),
           })
         )
       : dispatch(
@@ -70,6 +73,11 @@ const Work = () => {
             date: value,
           })
         );
+    dispatch(
+      getServices({
+        userId: id,
+      })
+    );
   }, [value, arxive]);
 
   useEffect(() => {
@@ -105,13 +113,13 @@ const Work = () => {
             {arxive ? "Վերադառնալ" : "Դիտել արխիվը"}
           </Button>
         </Box>
-        {role === "admin" && (
+        {/* {role === "admin" && !arxive && (
           <Box>
             <Button variant="outlined" onClick={() => setSetAdd(true)}>
               <AddIcon /> Ավելացնել
             </Button>
           </Box>
-        )}
+        )} */}
         {role === "superAdmin" && arxive && (
           <Box>
             <Button variant="outlined" onClick={() => setResults(true)}>
@@ -135,13 +143,6 @@ const Work = () => {
             </LocalizationProvider>
           </Box>
         )}
-        <Box>
-          {value && (
-            <Button variant="outlined" onClick={() => setValue(null)}>
-              <FilterAltOffIcon /> Ջնջել ամսաթվի ֆիլտրը
-            </Button>
-          )}
-        </Box>
         <Box>
           {value && (
             <Button variant="outlined" onClick={() => setValue(null)}>
@@ -228,32 +229,50 @@ const Work = () => {
             flexWrap: "wrap",
           }}
         >
-          {data?.map((row) => (
-            <Card sx={{ width: 300, backgroundColor: "whitesmoke" }}>
+          {services?.map((row) => (
+            <Card
+              sx={{
+                width: 300,
+                backgroundColor:
+                  current == row.id ? "greenyellow" : "whitesmoke",
+                cursor: "pointer",
+              }}
+              onClick={() => setCurrent(row.id)}
+            >
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                  {row?.Service?.name}
+                  {row?.name}
                 </Typography>
-                {row.createdAt.slice(0, 10)} {row.createdAt.slice(11, 16)}
               </CardContent>
-              <CardActions
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <Button
-                  fullWidth
-                  color="error"
-                  variant="outlined"
-                  onClick={() => dispatch(deleteWork(row.id, role))}
-                >
-                  <DeleteIcon sx={{ color: "red" }} />
-                </Button>
-              </CardActions>
             </Card>
           ))}
+          {current && (
+            <Box mt={2} p={2}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  if (current) {
+                    dispatch(
+                      addWork({
+                        userId: id,
+                        serviceId: current,
+                      })
+                    );
+                    setCurrent(null);
+                    Swal.fire({
+                      position: "center",
+                      iconColor: "#1d37de",
+                      icon: "success",
+                      showConfirmButton: false,
+                      timer: 1500,
+                    });
+                  }
+                }}
+              >
+                Հաստատել
+              </Button>
+            </Box>
+          )}
         </Box>
       )}
 

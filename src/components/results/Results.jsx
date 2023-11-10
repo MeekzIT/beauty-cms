@@ -9,18 +9,29 @@ import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useParams } from "react-router-dom";
 import { useIsMobile } from "../../hooks/useScreenType";
 import CloseIcon from "@mui/icons-material/Close";
+import { getMe } from "../../store/actions/auth-action";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { MonthCalendar } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 const Results = ({ open, setClose, all }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [value, setValue] = useState(null);
+  const [month, setMonth] = useState(null);
+  const [monthly, setMontly] = useState(false);
   const data = useSelector((state) => state.users.results);
+  const role = useSelector((state) => state.auth.isSuper);
   const isMobile = useIsMobile();
+  const [selectedDateRange, setSelectedDateRange] = useState([null, null]);
 
+  const handleDateChange = (date) => {
+    // date will be an array with the selected start and end date
+    setSelectedDateRange(date);
+  };
   const style = {
     position: "absolute",
     top: "50%",
@@ -34,6 +45,29 @@ const Results = ({ open, setClose, all }) => {
     p: 4,
   };
   useEffect(() => {
+    dispatch(getMe());
+    if (role == "superAdmin") {
+      const yourDateObject = new Date();
+
+      const yourDayjsObject = dayjs(yourDateObject);
+
+      const startOfMonth = yourDayjsObject.startOf("month");
+      const endOfMonth = yourDayjsObject.endOf("month");
+
+      const formattedStart = startOfMonth.format("YYYY-MM-DD");
+      const formattedEnd = endOfMonth.format("YYYY-MM-DD");
+      console.log(
+        formattedStart,
+        formattedEnd,
+        "formattedEndformattedEndformattedEndformattedEndformattedEndformattedEndformattedEndformattedEnd"
+      );
+      dispatch(
+        getResults({
+          start: formattedStart,
+          end: formattedEnd,
+        })
+      );
+    }
     all
       ? dispatch(
           getResults({
@@ -46,7 +80,25 @@ const Results = ({ open, setClose, all }) => {
             date: value,
           })
         );
-  }, [id, open, value]);
+  }, [id, open, value, monthly]);
+
+  const getMonth = (month) => {
+    const startOfMonth = month?.startOf("month");
+    const endOfMonth = month?.endOf("month");
+    const formattedStart = startOfMonth?.format("YYYY-MM-DD");
+    const formattedEnd = endOfMonth?.format("YYYY-MM-DD");
+
+    console.log(`Start of month: ${formattedStart}`);
+    console.log(`End of month: ${formattedEnd}`);
+
+    dispatch(
+      getResults({
+        date: value,
+        start: formattedStart,
+        end: formattedEnd,
+      })
+    );
+  };
   return (
     <Modal
       open={open}
@@ -70,34 +122,69 @@ const Results = ({ open, setClose, all }) => {
         </Typography>
 
         <Box mt={2} p={2}>
-          <Box>
+          <Box pt={2}>
+            <Button onClick={() => setMontly(!monthly)} variant="outlined">
+              {monthly ? "Վերադառնալ" : "Դիտել ամսական"}
+            </Button>
+          </Box>
+          {monthly ? (
             <Box>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DatePicker"]}>
-                  <DatePicker
-                    value={value}
-                    onChange={(newValue) =>
-                      setValue(newValue.format("YYYY-MM-DD"))
-                    }
+                  <MonthCalendar
+                    value={month}
+                    onChange={(newValue) => getMonth(dayjs(newValue))}
                   />
                 </DemoContainer>
               </LocalizationProvider>
+              <Box>
+                <Typography component="h3">
+                  Ամբողջական - {data?.all} ֏
+                </Typography>
+                <Typography component="h3">
+                  Օգուտ - {data?.cantora} ֏
+                </Typography>
+                <Typography component="h3">
+                  Աշխատավարձ - {data?.benefit} ֏
+                </Typography>
+              </Box>
             </Box>
-            <Box mt={1} mb={1}>
-              {value && (
-                <Button variant="outlined" onClick={() => setValue(null)}>
-                  <FilterAltOffIcon /> Ջնջել ամսաթվի ֆիլտրը
-                </Button>
-              )}
-            </Box>
-          </Box>
-          <Box>
-            <Typography component="h3">Ամբողջական - {data?.all} ֏</Typography>
-            <Typography component="h3">Օգուտ - {data?.cantora} ֏</Typography>
-            <Typography component="h3">
-              Աշխատավարձ - {data?.benefit} ֏
-            </Typography>
-          </Box>
+          ) : (
+            <>
+              <Box>
+                <Box>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker"]}>
+                      <DatePicker
+                        value={value}
+                        onChange={(newValue) =>
+                          setValue(newValue.format("YYYY-MM-DD"))
+                        }
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </Box>
+                <Box mt={1} mb={1}>
+                  {value && (
+                    <Button variant="outlined" onClick={() => setValue(null)}>
+                      <FilterAltOffIcon /> Ջնջել ամսաթվի ֆիլտրը
+                    </Button>
+                  )}
+                </Box>
+              </Box>
+              <Box>
+                <Typography component="h3">
+                  Ամբողջական - {data?.all} ֏
+                </Typography>
+                <Typography component="h3">
+                  Օգուտ - {data?.cantora} ֏
+                </Typography>
+                <Typography component="h3">
+                  Աշխատավարձ - {data?.benefit} ֏
+                </Typography>
+              </Box>
+            </>
+          )}
         </Box>
       </Box>
     </Modal>
