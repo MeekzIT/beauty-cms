@@ -246,32 +246,6 @@ export const addService = (data) => {
   };
 };
 
-export const getResults = (data) => {
-  return (dispatch) => {
-    axios
-      .get(
-        `${keys.api}/user/calc-service`,
-        {
-          headers: {
-            Authorization: `Bearer ${keys.token}`,
-          },
-        },
-        { params: data }
-      )
-      .then((response) => {
-        dispatch({
-          type: GET_RESULTS,
-          payload: {
-            data: response.data.date,
-          },
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-};
-
 export const dengerDelete = () => {
   return (dispatch) => {
     axios
@@ -304,18 +278,40 @@ export const dengerDelete = () => {
   };
 };
 
-export const getWorks = (data) => {
+export const getResults = (data) => {
   return (dispatch) => {
     axios
-      .get(
-        `${keys.api}/user/get-user-work`,
-        {
-          headers: {
-            Authorization: `Bearer ${keys.token}`,
-          },
+      .get(`${keys.api}/user/calc-service`, {
+        params: data,
+
+        headers: {
+          Authorization: `Bearer ${keys.token}`,
         },
-        { params: data }
-      )
+      })
+      .then((response) => {
+        dispatch({
+          type: GET_RESULTS,
+          payload: {
+            data: response.data.date,
+          },
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+};
+
+export const getWorks = (data) => {
+  console.log(data, "1111111111111111111111111");
+  return (dispatch) => {
+    axios
+      .get(`${keys.api}/user/get-user-work`, {
+        params: data,
+        headers: {
+          Authorization: `Bearer ${keys.token}`,
+        },
+      })
       .then((response) => {
         dispatch({
           type: GET_WORKS,

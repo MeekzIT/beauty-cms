@@ -22,6 +22,11 @@ import CalculateIcon from "@mui/icons-material/Calculate";
 import Results from "../../components/results/Results";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -39,7 +44,7 @@ const Home = () => {
   }, []);
 
   return (
-    <Box>
+    <Box component={Paper}>
       <Box
         p={2}
         sx={{
@@ -72,7 +77,7 @@ const Home = () => {
           </Box>
         )}
       </Box>
-      <Box sx={{ overflow: "auto" }}>
+      {/* <Box sx={{ overflow: "auto" }}>
         <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -131,6 +136,58 @@ const Home = () => {
             </Table>
           </TableContainer>
         </Box>
+      </Box> */}
+      <Box
+        sx={{
+          display: "flex",
+          padding: "15px",
+          gap: "10px",
+          flexWrap: "wrap",
+        }}
+      >
+        {data?.map((row) => (
+          <Card sx={{ width: 300, backgroundColor: "whitesmoke" }}>
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {row.name}
+              </Typography>
+            </CardContent>
+            <CardActions
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+              }}
+            >
+              <Button
+                fullWidth
+                variant="contained"
+                onClick={() => {
+                  navigate(`/work/${row.id}`);
+                }}
+              >
+                <AddIcon /> Աշխատանքներ
+              </Button>
+              <Button
+                fullWidth
+                variant="outlined"
+                onClick={() => {
+                  navigate(`/user/${row.id}`);
+                }}
+              >
+                <VisibilityIcon /> Ծառայություններ
+              </Button>
+              <Button
+                fullWidth
+                color="error"
+                variant="outlined"
+                onClick={() => dispatch(deleteUser(row.id))}
+              >
+                <DeleteIcon sx={{ color: "red" }} />
+              </Button>
+            </CardActions>
+          </Card>
+        ))}
       </Box>
       <UserModal open={open} setClose={setOpen} />
       <Results open={results} setClose={setResults} all={true} />

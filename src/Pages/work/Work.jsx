@@ -32,37 +32,54 @@ import CalculateIcon from "@mui/icons-material/Calculate";
 import Results from "../../components/results/Results";
 import { getMe } from "../../store/actions/auth-action";
 import AddWork from "../../components/addWork/AddWork";
+import dayjs from "dayjs";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
 
 const Work = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [current, setCurrent] = useState(null);
+  const [arxive, setArxive] = useState(false);
   const [open, setOpen] = useState(false);
   const [add, setSetAdd] = useState(false);
   const [results, setResults] = useState(false);
-
-  const [value, setValue] = useState(null);
+  const firstDayOfMonth = dayjs().startOf("month");
+  const lastDayOfMonth = dayjs().endOf("month");
+  const [value, setValue] = useState();
   const handleOpen = () => setOpen(true);
   const data = useSelector((state) => state.users.work);
   const role = useSelector((state) => state.auth.isSuper);
   const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
-    dispatch(
-      getWorks({
-        userId: id,
-        date: value,
-      })
-    );
-  }, [value]);
+    !arxive
+      ? dispatch(
+          getWorks({
+            userId: id,
+            date: dayjs().format("YYYY-MM-DD"),
+          })
+        )
+      : dispatch(
+          getWorks({
+            userId: id,
+            date: value,
+          })
+        );
+  }, [value, arxive]);
 
   useEffect(() => {
     dispatch(getUser({ id }));
     dispatch(getMe());
   }, []);
+
+  console.log(data);
   return (
-    <Box>
+    <Box component={Paper}>
       <Box p={2}>
         <h1>Աշխատանքներ` {user?.name}</h1>
       </Box>
@@ -75,10 +92,17 @@ const Work = () => {
           flexWrap: "wrap",
         }}
       >
+        {!arxive && (
+          <Box>
+            <Button variant="outlined" onClick={() => navigate(HOME_PAGE)}>
+              <KeyboardBackspaceIcon />
+              Վերադառնալ
+            </Button>
+          </Box>
+        )}
         <Box>
-          <Button variant="outlined" onClick={() => navigate(HOME_PAGE)}>
-            <KeyboardBackspaceIcon />
-            Վերադառնալ
+          <Button variant="outlined" onClick={() => setArxive(!arxive)}>
+            {arxive ? "Վերադառնալ" : "Դիտել արխիվը"}
           </Button>
         </Box>
         {role === "admin" && (
@@ -88,19 +112,21 @@ const Work = () => {
             </Button>
           </Box>
         )}
-        {role === "superAdmin" && (
+        {role === "superAdmin" && arxive && (
           <Box>
             <Button variant="outlined" onClick={() => setResults(true)}>
               <CalculateIcon /> Դիտել արդյունքները
             </Button>
           </Box>
         )}
-        {role === "superAdmin" && (
+        {arxive && (
           <Box>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["DatePicker"]}>
                 <DatePicker
                   value={value}
+                  minDate={role == "admin" ? firstDayOfMonth : null}
+                  maxDate={role == "admin" ? lastDayOfMonth : null}
                   onChange={(newValue) =>
                     setValue(newValue.format("YYYY-MM-DD"))
                   }
@@ -116,78 +142,124 @@ const Work = () => {
             </Button>
           )}
         </Box>
+        <Box>
+          {value && (
+            <Button variant="outlined" onClick={() => setValue(null)}>
+              <FilterAltOffIcon /> Ջնջել ամսաթվի ֆիլտրը
+            </Button>
+          )}
+        </Box>
       </Box>
-      <Box sx={{ overflow: "auto" }}>
-        <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="left">Աշխատանքի տեսակը</TableCell>
-                  <TableCell align="left">Գին</TableCell>
-                  <TableCell align="left">Աշխատողի աշխատանքը</TableCell>
-                  <TableCell align="left">Ամսաթիվ</TableCell>
-                  {role === "admin" && (
-                    <TableCell align="left">Ջնջել</TableCell>
-                  )}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data?.length ? (
-                  data?.map((row) => (
-                    <TableRow
-                      key={row.modeName}
+      {arxive ? (
+        <Box sx={{ overflow: "auto" }}>
+          <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="left">Աշխատանքի տեսակը</TableCell>
+                    <TableCell align="left">Գին</TableCell>
+                    <TableCell align="left">Աշխատողի աշխատանքը</TableCell>
+                    <TableCell align="left">Ամսաթիվ</TableCell>
+                    {role === "admin" && (
+                      <TableCell align="left">Ջնջել</TableCell>
+                    )}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data?.length ? (
+                    data?.map((row) => (
+                      <TableRow
+                        key={row.modeName}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell component="th" scope="row" align="left">
+                          {row?.Service?.name}
+                        </TableCell>
+                        <TableCell component="th" scope="row" align="left">
+                          {row?.Service?.price} ֏
+                        </TableCell>{" "}
+                        <TableCell component="th" scope="row" align="left">
+                          {row?.Service?.benefit} ֏
+                        </TableCell>{" "}
+                        <TableCell component="th" scope="row" align="left">
+                          {row.createdAt.slice(0, 10)}{" "}
+                          {row.createdAt.slice(11, 16)}
+                        </TableCell>
+                        {role === "admin" && (
+                          <TableCell component="th" scope="row" align="left">
+                            <Button
+                              variant="outlined"
+                              onClick={() => dispatch(deleteWork(row.id, role))}
+                            >
+                              <DeleteIcon sx={{ color: "red" }} />
+                            </Button>
+                          </TableCell>
+                        )}
+                      </TableRow>
+                    ))
+                  ) : (
+                    <Box
+                      p={2}
                       sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
+                        width: "100%",
+                        height: "20vh",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
                       }}
                     >
-                      <TableCell component="th" scope="row" align="left">
-                        {row?.Service?.name}
-                      </TableCell>
-                      <TableCell component="th" scope="row" align="left">
-                        {row?.Service?.price} ֏
-                      </TableCell>{" "}
-                      <TableCell component="th" scope="row" align="left">
-                        {row?.Service?.benefit} ֏
-                      </TableCell>{" "}
-                      <TableCell component="th" scope="row" align="left">
-                        {row.createdAt.slice(0, 10)}{" "}
-                        {row.createdAt.slice(11, 16)}
-                      </TableCell>
-                      {role === "admin" && (
-                        <TableCell component="th" scope="row" align="left">
-                          <Button
-                            variant="outlined"
-                            onClick={() => dispatch(deleteWork(row.id, role))}
-                          >
-                            <DeleteIcon sx={{ color: "red" }} />
-                          </Button>
-                        </TableCell>
-                      )}
-                    </TableRow>
-                  ))
-                ) : (
-                  <Box
-                    p={2}
-                    sx={{
-                      width: "100%",
-                      height: "20vh",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    Դատարկ
-                  </Box>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                      Դատարկ
+                    </Box>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
         </Box>
-        <Services open={open} setClose={setOpen} data={current} />
-        <AddWork open={add} setClose={setSetAdd} />
-        <Results open={results} setClose={setResults} all={false} />
-      </Box>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            padding: "15px",
+            gap: "10px",
+            flexWrap: "wrap",
+          }}
+        >
+          {data?.map((row) => (
+            <Card sx={{ width: 300, backgroundColor: "whitesmoke" }}>
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {row?.Service?.name}
+                </Typography>
+                {row.createdAt.slice(0, 10)} {row.createdAt.slice(11, 16)}
+              </CardContent>
+              <CardActions
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
+                }}
+              >
+                <Button
+                  fullWidth
+                  color="error"
+                  variant="outlined"
+                  onClick={() => dispatch(deleteWork(row.id, role))}
+                >
+                  <DeleteIcon sx={{ color: "red" }} />
+                </Button>
+              </CardActions>
+            </Card>
+          ))}
+        </Box>
+      )}
+
+      <Services open={open} setClose={setOpen} data={current} />
+      <AddWork open={add} setClose={setSetAdd} />
+      <Results open={results} setClose={setResults} all={false} />
     </Box>
   );
 };
