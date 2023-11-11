@@ -9,12 +9,15 @@ import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+
 import {
   addWork,
   deleteService,
   deleteWork,
   getServices,
   getUser,
+  getUsers,
   getWorks,
 } from "../../store/actions/user-action";
 import EditIcon from "@mui/icons-material/Edit";
@@ -44,29 +47,24 @@ import Swal from "sweetalert2";
 const AllWork = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [current, setCurrent] = useState(null);
-  const [arxive, setArxive] = useState(false);
   const [open, setOpen] = useState(false);
-  const [add, setSetAdd] = useState(false);
-  const [results, setResults] = useState(false);
-  const firstDayOfMonth = dayjs().startOf("month");
-  const lastDayOfMonth = dayjs().endOf("month");
-  const [value, setValue] = useState();
   const handleOpen = () => setOpen(true);
+  const users = useSelector((state) => state.users.users);
   const data = useSelector((state) => state.users.work);
   const role = useSelector((state) => state.auth.isSuper);
   const services = useSelector((state) => state.users.services);
 
   useEffect(() => {
+    dispatch(getUsers());
+  }, []);
+
+  useEffect(() => {
     dispatch(
-      getWorks({
-        // userId: id,
-        // date: value,
+      getServices({
+        userId: open,
       })
     );
-  }, [value, arxive]);
-
-  useEffect(() => {}, []);
+  }, [open]);
 
   console.log(data);
   return (
@@ -87,69 +85,69 @@ const AllWork = () => {
             Վերադառնալ
           </Button>
         </Box>
-        <Box>
-          {value && (
-            <Button variant="outlined" onClick={() => setValue(null)}>
-              <FilterAltOffIcon /> Ջնջել ամսաթվի ֆիլտրը
-            </Button>
-          )}
-        </Box>
       </Box>
 
-      <Box sx={{ overflow: "auto" }}>
-        <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="left">Աշխատանքի տեսակը</TableCell>
-                  <TableCell align="left">Գին</TableCell>
-                  <TableCell align="left">Աշխատողի աշխատանքը</TableCell>
-                  <TableCell align="left">Ամսաթիվ</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data?.length ? (
-                  data?.map((row) => (
-                    <TableRow
-                      key={row.modeName}
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                      }}
-                    >
-                      <TableCell component="th" scope="row" align="left">
-                        {row?.Service?.name}
-                      </TableCell>
-                      <TableCell component="th" scope="row" align="left">
-                        {row?.Service?.price} ֏
-                      </TableCell>{" "}
-                      <TableCell component="th" scope="row" align="left">
-                        {row?.Service?.benefit} ֏
-                      </TableCell>{" "}
-                      <TableCell component="th" scope="row" align="left">
-                        {row.createdAt.slice(0, 10)}{" "}
-                        {row.createdAt.slice(11, 16)}
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <Box
-                    p={2}
-                    sx={{
-                      width: "100%",
-                      height: "20vh",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    Դատարկ
-                  </Box>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
+      <Box
+        sx={{
+          display: "flex",
+          padding: "15px",
+          gap: "10px",
+          flexWrap: "wrap",
+        }}
+      >
+        {users?.map((row) => (
+          <Card
+            sx={{
+              width: 300,
+              backgroundColor: "whitesmoke",
+              cursor: "pointer",
+            }}
+            onClick={() => setOpen(row.id)}
+          >
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {row.name}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
+      </Box>
+      <hr />
+      <Box p={2}>
+        <Typography gutterBottom variant="h5" component="div">
+          Ծառայություներ
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          padding: "15px",
+          gap: "10px",
+          flexWrap: "wrap",
+        }}
+      >
+        {services?.length ? (
+          services?.map((row) => (
+            <Card
+              sx={{
+                width: 300,
+                backgroundColor: "whitesmoke",
+                cursor: "pointer",
+              }}
+              onClick={() => setOpen(row.id)}
+            >
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {row.name}
+                </Typography>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <Typography gutterBottom variant="h5" component="div">
+            Դատարկ
+          </Typography>
+        )}
       </Box>
     </Box>
   );

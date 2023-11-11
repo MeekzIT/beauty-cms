@@ -27,7 +27,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { ALL_WORK_PAGE } from "../../routing/pats";
+import { ALL_WORK_PAGE, SALARY_PAGE } from "../../routing/pats";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -75,8 +75,8 @@ const Home = () => {
               </Button>
             </Box>
             <Box>
-              <Button variant="outlined">
-                <CalculateIcon /> Դիտել արդյունքները
+              <Button variant="outlined" onClick={()=>navigate(SALARY_PAGE)}>
+                <CalculateIcon /> Դիտել արդյունքները 
               </Button>
             </Box>
           </>
