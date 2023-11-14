@@ -44,15 +44,12 @@ export const getUsers = () => {
 export const getUser = (data) => {
   return (dispatch) => {
     axios
-      .get(
-        `${keys.api}/user/single`,
-        { params: data },
-        {
-          headers: {
-            Authorization: `Bearer ${keys.token}`,
-          },
-        }
-      )
+      .get(`${keys.api}/user/single`, {
+        params: data,
+        headers: {
+          Authorization: `Bearer ${keys.token}`,
+        },
+      })
       .then((response) => {
         dispatch({
           type: GET_USER,
@@ -132,15 +129,12 @@ export const addUser = (data) => {
 export const getServices = (data) => {
   return (dispatch) => {
     axios
-      .get(
-        `${keys.api}/user/user-service`,
-        { params: data },
-        {
-          headers: {
-            Authorization: `Bearer ${keys.token}`,
-          },
-        }
-      )
+      .get(`${keys.api}/user/user-service`, {
+        params: data,
+        headers: {
+          Authorization: `Bearer ${keys.token}`,
+        },
+      })
       .then((response) => {
         dispatch({
           type: GET_SERVICES,
@@ -302,7 +296,6 @@ export const getResults = (data) => {
 };
 
 export const getWorks = (data) => {
-  console.log(data, "1111111111111111111111111");
   return (dispatch) => {
     axios
       .get(`${keys.api}/user/get-user-work`, {
@@ -390,15 +383,12 @@ export const deleteWork = (data, role) => {
 export const getAccessWorks = (data) => {
   return (dispatch) => {
     axios
-      .get(
-        `${keys.api}/user/get-user-access-work`,
-        {
-          headers: {
-            Authorization: `Bearer ${keys.token}`,
-          },
+      .get(`${keys.api}/user/get-user-access-work`, {
+        params: data,
+        headers: {
+          Authorization: `Bearer ${keys.token}`,
         },
-        { params: data }
-      )
+      })
       .then((response) => {
         dispatch({
           type: GET_ACCESS_WORKS,

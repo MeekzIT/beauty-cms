@@ -7,9 +7,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
 import { getMe, logoutAction } from "../../../store/actions/auth-action";
-import { DELETED_PAGE, LOGIN_PAGE } from "../../../routing/pats";
+import { DELETED_PAGE, LOGIN_PAGE, SETTINGS_PAGE } from "../../../routing/pats";
 import { getAccessWorks } from "../../../store/actions/user-action";
 import { Button } from "@mui/material";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const Navbar = ({ close, setClose }) => {
   const dispatch = useDispatch();
@@ -62,11 +63,22 @@ const Navbar = ({ close, setClose }) => {
               </Menu>
             </div>
           )}
+          {role == "superAdmin" && (
+            <div className="item">
+              <Button
+                sx={{ color: "white" }}
+                onClick={() => navigate(SETTINGS_PAGE)}
+              >
+                <SettingsIcon sx={{ color: "white" }} /> Կարգավորումներ
+              </Button>
+            </div>
+          )}
           <div className="item">
             <h2 style={{ color: "white" }}>
               {role == "superAdmin" ? "Սուպեր Ադմին" : "Ադմին"}
             </h2>
           </div>
+
           {data?.length > 0 && (
             <Button
               variant="contained"

@@ -101,8 +101,13 @@ const AllWork = () => {
           <Card
             sx={{
               width: 300,
-              backgroundColor: "whitesmoke",
-              cursor: "pointer",
+                      padding: "10px",
+                      backgroundColor: "whitesmoke",
+                      cursor: "pointer",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      flexDirection: "column",
             }}
             onClick={() => setOpen(row.id)}
           >
@@ -133,8 +138,13 @@ const AllWork = () => {
             <Card
               sx={{
                 width: 300,
+                padding: "10px",
                 backgroundColor: "whitesmoke",
                 cursor: "pointer",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
               }}
               onClick={() => setOpen(row.id)}
             >

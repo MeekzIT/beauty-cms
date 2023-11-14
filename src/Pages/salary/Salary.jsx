@@ -87,15 +87,12 @@ const Salary = () => {
     dispatch(getUsers());
     dispatch(getMe());
   }, []);
-  console.log(users, "users");
   const getMonth = (month) => {
     const startOfMonth = month?.startOf("month");
     const endOfMonth = month?.endOf("month");
     const formattedStart = startOfMonth?.format("YYYY-MM-DD");
     const formattedEnd = endOfMonth?.format("YYYY-MM-DD");
 
-    console.log(`Start of month: ${formattedStart}`);
-    console.log(`End of month: ${formattedEnd}`);
     getWorks({
       userId: user,
       start: formattedStart,

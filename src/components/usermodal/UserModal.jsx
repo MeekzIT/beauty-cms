@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { addUser } from "../../store/actions/user-action";
 import { useIsMobile } from "../../hooks/useScreenType";
 import CloseIcon from "@mui/icons-material/Close";
+import { getCategory } from "../../store/actions/category-action";
 
 const UserModal = ({ open, setClose, type }) => {
   const dispatch = useDispatch();
@@ -60,6 +61,7 @@ const UserModal = ({ open, setClose, type }) => {
               if (name !== "") {
                 dispatch(addUser({ name: name, type }));
                 setClose(false);
+                dispatch(getCategory());
               }
             }}
           >

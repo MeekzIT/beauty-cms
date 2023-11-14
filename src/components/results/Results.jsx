@@ -56,11 +56,7 @@ const Results = ({ open, setClose, all }) => {
 
       const formattedStart = startOfMonth.format("YYYY-MM-DD");
       const formattedEnd = endOfMonth.format("YYYY-MM-DD");
-      console.log(
-        formattedStart,
-        formattedEnd,
-        "formattedEndformattedEndformattedEndformattedEndformattedEndformattedEndformattedEndformattedEnd"
-      );
+
       dispatch(
         getResults({
           start: formattedStart,
@@ -88,8 +84,6 @@ const Results = ({ open, setClose, all }) => {
     const formattedStart = startOfMonth?.format("YYYY-MM-DD");
     const formattedEnd = endOfMonth?.format("YYYY-MM-DD");
 
-    console.log(`Start of month: ${formattedStart}`);
-    console.log(`End of month: ${formattedEnd}`);
 
     dispatch(
       getResults({

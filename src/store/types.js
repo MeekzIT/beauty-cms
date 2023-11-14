@@ -18,3 +18,7 @@ export const DELETE_WORKS = "DELETE_WORKS";
 export const EDIT_WORK = "EDIT_WORK";
 export const GET_ACCESS_WORKS = "GET_ACCESS_WORKS";
 export const DELETE_ACCESS_WORKS = "DELETE_ACCESS_WORKS";
+export const GET_CATEGORY = "GET_CATEGORY";
+export const GET_ADMIN = "GET_ADMIN";
+export const DELETE_CATEGORY = "DELETE_CATEGORY";
+export const ADD_CATEGORY = "ADD_CATEGORY";

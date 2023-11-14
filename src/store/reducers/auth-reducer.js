@@ -1,4 +1,4 @@
-import { GET_ME, GET_USER, SET_AUTH } from "../types";
+import { GET_ADMIN, GET_ME, GET_USER, SET_AUTH } from "../types";
 import { LOGIN_ACTION } from "../types";
 
 const initialState = {
@@ -6,6 +6,7 @@ const initialState = {
   admin: null,
   isSuper: false,
   user: null,
+  myAdmin: null,
 };
 
 export const isAuthReducer = (state = initialState, action) => {
@@ -33,6 +34,11 @@ export const isAuthReducer = (state = initialState, action) => {
       return {
         ...state,
         user: action.payload.data,
+      };
+    case GET_ADMIN:
+      return {
+        ...state,
+        myAdmin: action.payload.data,
       };
     default:
       return state;

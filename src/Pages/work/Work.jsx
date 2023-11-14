@@ -85,7 +85,6 @@ const Work = () => {
     dispatch(getMe());
   }, []);
 
-  console.log(data);
   return (
     <Box component={Paper}>
       <Box p={2}>
@@ -109,7 +108,13 @@ const Work = () => {
           </Box>
         )}
         <Box>
-          <Button variant="outlined" onClick={() => setArxive(!arxive)}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setArxive(!arxive);
+              setValue(null);
+            }}
+          >
             {arxive ? "Վերադառնալ" : "Դիտել արխիվը"}
           </Button>
         </Box>
@@ -233,11 +238,21 @@ const Work = () => {
             <Card
               sx={{
                 width: 300,
+                padding: "10px",
+                backgroundColor: "whitesmoke",
+                cursor: "pointer",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
                 backgroundColor:
                   current == row.id ? "greenyellow" : "whitesmoke",
                 cursor: "pointer",
+                flexDirection: "column",
               }}
-              onClick={() => setCurrent(row.id)}
+              onClick={() => {
+                setCurrent(row.id);
+                setSetAdd(true);
+              }}
             >
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
@@ -246,7 +261,7 @@ const Work = () => {
               </CardContent>
             </Card>
           ))}
-          {current && (
+          {/* {current && (
             <Box mt={2} p={2}>
               <Button
                 variant="contained"
@@ -272,12 +287,16 @@ const Work = () => {
                 Հաստատել
               </Button>
             </Box>
-          )}
+          )} */}
         </Box>
       )}
 
-      <Services open={open} setClose={setOpen} data={current} />
-      <AddWork open={add} setClose={setSetAdd} />
+      <AddWork
+        open={add}
+        setClose={setSetAdd}
+        current={current}
+        setCurrent={setCurrent}
+      />
       <Results open={results} setClose={setResults} all={false} />
     </Box>
   );

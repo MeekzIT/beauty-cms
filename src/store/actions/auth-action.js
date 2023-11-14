@@ -1,6 +1,6 @@
 import axios from "axios";
 import { keys } from "../../keys";
-import { LOGIN_ACTION, SET_AUTH } from "../types";
+import { GET_ADMIN, LOGIN_ACTION, SET_AUTH } from "../types";
 import { HOME_PAGE } from "../../routing/pats";
 import Swal from "sweetalert2";
 
@@ -22,6 +22,10 @@ export const loginAction = (data) => {
           localStorage.setItem(
             "isSuper",
             JSON.stringify(response.data.data.role)
+          );
+          localStorage.setItem(
+            "email",
+            JSON.stringify(response.data.data.email)
           );
           localStorage.setItem(
             "token",
@@ -55,7 +59,7 @@ export const logoutAction = () => {
     axios
       .post(
         `${keys.api}/admin/logout`,
-        {},
+        { email: keys.email },
         {
           headers: {
             Authorization: `Bearer ${keys.token}`,
@@ -82,6 +86,9 @@ export const getMe = () => {
   return (dispatch) => {
     axios
       .get(`${keys.api}/admin`, {
+        params: {
+          email: keys.email,
+        },
         headers: {
           Authorization: `Bearer ${keys.token}`,
         },
@@ -101,6 +108,31 @@ export const getMe = () => {
           JSON.stringify(response.data.data.role)
         );
         localStorage.setItem("token", JSON.stringify(response.data.data.token));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+};
+
+export const getAdmin = () => {
+  return (dispatch) => {
+    axios
+      .get(`${keys.api}/admin/get-admin`, {
+        params: {
+          email: keys.email,
+        },
+        headers: {
+          Authorization: `Bearer ${keys.token}`,
+        },
+      })
+      .then((response) => {
+        dispatch({
+          type: GET_ADMIN,
+          payload: {
+            data: response.data.data,
+          },
+        });
       })
       .catch((error) => {
         console.error(error);

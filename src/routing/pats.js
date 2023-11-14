@@ -5,3 +5,5 @@ export const WORK_PAGE = "/work/:id";
 export const DELETED_PAGE = "/access";
 export const ALL_WORK_PAGE = "/all-works";
 export const SALARY_PAGE = "/slary";
+export const CATEGORIES_PAGE = "/categories";
+export const SETTINGS_PAGE = "/settings";
