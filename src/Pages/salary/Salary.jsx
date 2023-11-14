@@ -46,6 +46,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { MonthCalendar } from "@mui/x-date-pickers";
 
 const Salary = () => {
   const dispatch = useDispatch();
@@ -58,6 +59,8 @@ const Salary = () => {
   const firstDayOfMonth = dayjs().startOf("month");
   const lastDayOfMonth = dayjs().endOf("month");
   const [value, setValue] = useState();
+  const [month, setMonth] = useState(null);
+  const [monthly, setMontly] = useState(false);
   const handleOpen = () => setOpen(true);
   const data = useSelector((state) => state.users.work);
   const role = useSelector((state) => state.auth.isSuper);
@@ -85,6 +88,28 @@ const Salary = () => {
     dispatch(getMe());
   }, []);
   console.log(users, "users");
+  const getMonth = (month) => {
+    const startOfMonth = month?.startOf("month");
+    const endOfMonth = month?.endOf("month");
+    const formattedStart = startOfMonth?.format("YYYY-MM-DD");
+    const formattedEnd = endOfMonth?.format("YYYY-MM-DD");
+
+    console.log(`Start of month: ${formattedStart}`);
+    console.log(`End of month: ${formattedEnd}`);
+    getWorks({
+      userId: user,
+      start: formattedStart,
+      end: formattedEnd,
+    });
+    dispatch(
+      getWorks({
+        userId: user,
+        start: formattedStart,
+        end: formattedEnd,
+      })
+    );
+  };
+
   return (
     <Box component={Paper}>
       <Box p={2}>
@@ -107,11 +132,16 @@ const Salary = () => {
         </Box>
         <Box>
           <Select
+            fullWidth
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={user}
             label="Ծառայություն"
             onChange={(e) => setUser(e.target.value)}
+            sx={{
+              width: "300px",
+              color: "black",
+            }}
           >
             {users?.map((i) => (
               <MenuItem value={i?.id} key={i?.id}>
@@ -123,20 +153,55 @@ const Salary = () => {
         <Box>
           {user && (
             <Button variant="outlined" onClick={() => setUser(null)}>
-              <FilterAltOffIcon /> Ջնջել user filtre
+              <FilterAltOffIcon /> Ջնջել աշխատողի ֆիլտրը
             </Button>
           )}
         </Box>
-        <Box>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={["DatePicker"]}>
-              <DatePicker
-                value={value}
-                onChange={(newValue) => setValue(newValue.format("YYYY-MM-DD"))}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
-        </Box>
+        {role == "admin" ? (
+          <Box>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DatePicker"]}>
+                <DatePicker
+                  value={value}
+                  minDate={role == "admin" ? firstDayOfMonth : null}
+                  maxDate={role == "admin" ? lastDayOfMonth : null}
+                  onChange={(newValue) =>
+                    setValue(newValue.format("YYYY-MM-DD"))
+                  }
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+          </Box>
+        ) : (
+          <Box>
+            <Box pt={2}>
+              <Button onClick={() => setMontly(!monthly)} variant="outlined">
+                {monthly ? "Օրական" : "Դիտել ամսական"}
+              </Button>
+            </Box>
+            {monthly ? (
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={["DatePicker"]}>
+                  <MonthCalendar
+                    value={month}
+                    onChange={(newValue) => getMonth(dayjs(newValue))}
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+            ) : (
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={["DatePicker"]}>
+                  <DatePicker
+                    value={value}
+                    onChange={(newValue) =>
+                      setValue(newValue.format("YYYY-MM-DD"))
+                    }
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+            )}
+          </Box>
+        )}
 
         <Box>
           {value && (

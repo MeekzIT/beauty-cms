@@ -53,6 +53,8 @@ const AllWork = () => {
   const data = useSelector((state) => state.users.work);
   const role = useSelector((state) => state.auth.isSuper);
   const services = useSelector((state) => state.users.services);
+  const firstDayOfMonth = dayjs().startOf("month");
+  const lastDayOfMonth = dayjs().endOf("month");
 
   useEffect(() => {
     dispatch(getUsers());

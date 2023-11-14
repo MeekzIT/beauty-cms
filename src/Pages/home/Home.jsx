@@ -60,7 +60,7 @@ const Home = () => {
       >
         {role === "superAdmin" ? (
           <Box>
-            <Button variant="outlined" onClick={() => setResults(true)}>
+            <Button variant="outlined" onClick={() => navigate(SALARY_PAGE)}>
               <CalculateIcon /> Դիտել արդյունքները
             </Button>
           </Box>
@@ -75,8 +75,8 @@ const Home = () => {
               </Button>
             </Box>
             <Box>
-              <Button variant="outlined" onClick={()=>navigate(SALARY_PAGE)}>
-                <CalculateIcon /> Դիտել արդյունքները 
+              <Button variant="outlined" onClick={() => navigate(SALARY_PAGE)}>
+                <CalculateIcon /> Դիտել արդյունքները
               </Button>
             </Box>
           </>
