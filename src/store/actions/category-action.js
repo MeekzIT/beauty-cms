@@ -42,13 +42,11 @@ export const deleteCategory = (data) => {
             payload: data,
           });
         } else
-          Swal.fire({
-            position: "center",
-            iconColor: "#1d37de",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500,
-          });
+        Swal.fire({
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       })
       .catch(function (error) {
         console.error(error);
@@ -71,13 +69,11 @@ export const addCategory = (data) => {
             payload: response.data.data,
           });
         } else
-          Swal.fire({
-            position: "center",
-            iconColor: "#1d37de",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500,
-          });
+        Swal.fire({
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       })
       .catch(function (error) {
         console.error(error);

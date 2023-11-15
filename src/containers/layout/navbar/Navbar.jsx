@@ -7,8 +7,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
 import { getMe, logoutAction } from "../../../store/actions/auth-action";
-import { DELETED_PAGE, LOGIN_PAGE, SETTINGS_PAGE } from "../../../routing/pats";
-import { getAccessWorks } from "../../../store/actions/user-action";
+import {
+  DELETED_PAGE,
+  HOME_PAGE,
+  LOGIN_PAGE,
+  SETTINGS_PAGE,
+} from "../../../routing/pats";
+import {
+  changeAccessedWork,
+  getAccessWorks,
+} from "../../../store/actions/user-action";
 import { Button } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 
@@ -18,13 +26,15 @@ const Navbar = ({ close, setClose }) => {
   const isAuth = useSelector((state) => state.auth.isAuth);
   const role = useSelector((state) => state.auth.isSuper);
   const data = useSelector((state) => state.users.accessWorks);
+  const deleted = useSelector((state) => state.users.accessWorks);
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   useEffect(() => {
     dispatch(getMe());
   }, []);
   useEffect(() => {
-    role == "superAdmin" && dispatch(getAccessWorks());
+    dispatch(getAccessWorks());
   }, [role]);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -47,20 +57,9 @@ const Navbar = ({ close, setClose }) => {
                   color: "white",
                 }}
                 fontSize="large"
-                onClick={handleClick}
+                onClick={() => navigate(HOME_PAGE)}
                 className="avatar"
               />
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleLogOut}>
-                  <LogoutIcon />
-                  Logout
-                </MenuItem>
-              </Menu>
             </div>
           )}
           {role == "superAdmin" && (
@@ -69,34 +68,96 @@ const Navbar = ({ close, setClose }) => {
                 sx={{ color: "white" }}
                 onClick={() => navigate(SETTINGS_PAGE)}
               >
-                <SettingsIcon sx={{ color: "white" }} /> Կարգավորումներ
+                <SettingsIcon sx={{ color: "white" }} />
               </Button>
             </div>
           )}
+          {isAuth && (
+            <div className="item">
+              <h2 style={{ color: "white" }}>
+                {role == "superAdmin" ? "Սուպեր Ադմին" : "Ադմին"}
+              </h2>
+            </div>
+          )}
           <div className="item">
-            <h2 style={{ color: "white" }}>
-              {role == "superAdmin" ? "Սուպեր Ադմին" : "Ադմին"}
-            </h2>
+            {data?.length > 0 && role == "superAdmin" && (
+              <Button
+                variant="contained"
+                sx={{
+                  background: "white",
+                  color: "red",
+                  "&:hover": {
+                    color: "#1d37de",
+                    backgroundColor: "white",
+                  },
+                }}
+                onClick={() => navigate(DELETED_PAGE)}
+              >
+                Դուք ունեք նոր ջնջված տվյալ
+              </Button>
+            )}
           </div>
-
-          {data?.length > 0 && (
-            <Button
-              variant="contained"
-              sx={{
-                background: "white",
-                color: "red",
-                "&:hover": {
-                  color: "#1d37de",
-                  backgroundColor: "white",
-                },
-              }}
-              onClick={() => navigate(DELETED_PAGE)}
-            >
-              Դուք ունեք նոր ջնջված տվյալ
-            </Button>
+          {data?.length > 0 && role == "admin" && (
+            <div className="item">
+              <Button
+                variant="contained"
+                sx={{
+                  background: "white",
+                  color: "red",
+                  "&:hover": {
+                    color: "#1d37de",
+                    backgroundColor: "white",
+                  },
+                }}
+                onClick={handleClick}
+              >
+                ջնջված տվյալներ
+              </Button>
+              <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+                {deleted?.map((row) => {
+                  return (
+                    <MenuItem>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <div>
+                          <h4>{row?.Service?.User?.name}</h4>
+                          <h5>
+                            {row?.Service?.name} | {row.createdAt.slice(0, 10)}
+                            {row.createdAt.slice(11, 16)}
+                          </h5>
+                        </div>
+                        <div>
+                          <Button
+                            onClick={() => {
+                              dispatch(changeAccessedWork(row.id));
+                              handleClose();
+                              dispatch(getAccessWorks());
+                            }}
+                          >
+                            վերադարձնել
+                          </Button>
+                        </div>
+                      </div>
+                    </MenuItem>
+                  );
+                })}
+              </Menu>
+            </div>
           )}
         </div>
       </div>
+      {isAuth && (
+        <div className="revert">
+          <Button sx={{ color: "white" }} onClick={handleLogOut}>
+            <LogoutIcon />
+            Logout
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

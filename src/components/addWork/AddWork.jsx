@@ -34,6 +34,35 @@ const AddWork = ({ open, setClose, current, setCurrent }) => {
     boxShadow: 24,
     p: 4,
   };
+
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === "Enter") {
+        dispatch(
+          addWork({
+            userId: id,
+            serviceId: current,
+          })
+        );
+        setCurrent(null);
+        setClose(false);
+        Swal.fire({
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    };
+
+    // Add event listener to the document
+    document.addEventListener("keydown", handleKeyPress);
+
+    // Cleanup: Remove event listener when the component unmounts
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, []);
+
   return (
     <Modal
       open={open}
@@ -69,8 +98,6 @@ const AddWork = ({ open, setClose, current, setCurrent }) => {
               setCurrent(null);
               setClose(false);
               Swal.fire({
-                position: "center",
-                iconColor: "#1d37de",
                 icon: "success",
                 showConfirmButton: false,
                 timer: 1500,

@@ -76,3 +76,7 @@ input {
   top: -5px;
   right: -5px;
 }
+
+.revert {
+  float: right !important;
+}

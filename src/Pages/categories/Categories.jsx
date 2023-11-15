@@ -58,7 +58,7 @@ const Categories = () => {
         </Box>
       </Box>
 
-      <Box sx={{ overflow: "auto" }}>
+      <Box sx={{ overflow: "auto", marginBottom: "30px" }}>
         <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">

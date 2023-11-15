@@ -157,16 +157,18 @@ const Work = () => {
         </Box>
       </Box>
       {arxive ? (
-        <Box sx={{ overflow: "auto" }}>
+        <Box sx={{ overflow: "auto", marginBottom: "100px" }}>
           <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
+                    <TableCell align="left">Աշխատող</TableCell>
                     <TableCell align="left">Աշխատանքի տեսակը</TableCell>
+                    <TableCell align="left">Ամսաթիվ</TableCell>
                     <TableCell align="left">Գին</TableCell>
                     <TableCell align="left">Աշխատողի աշխատանքը</TableCell>
-                    <TableCell align="left">Ամսաթիվ</TableCell>
+                    <TableCell align="left">Օգուտ</TableCell>
                     {role === "admin" && (
                       <TableCell align="left">Ջնջել</TableCell>
                     )}
@@ -182,18 +184,26 @@ const Work = () => {
                         }}
                       >
                         <TableCell component="th" scope="row" align="left">
+                          {row?.Service?.User?.name}
+                        </TableCell>
+                        <TableCell component="th" scope="row" align="left">
                           {row?.Service?.name}
                         </TableCell>
                         <TableCell component="th" scope="row" align="left">
                           {row?.Service?.price} ֏
                         </TableCell>{" "}
                         <TableCell component="th" scope="row" align="left">
-                          {row?.Service?.benefit} ֏
-                        </TableCell>{" "}
-                        <TableCell component="th" scope="row" align="left">
                           {row.createdAt.slice(0, 10)}{" "}
                           {row.createdAt.slice(11, 16)}
                         </TableCell>
+                        <TableCell component="th" scope="row" align="left">
+                          {row?.Service?.benefit} ֏
+                        </TableCell>{" "}
+                        <TableCell component="th" scope="row" align="left">
+                          {Number(row?.Service?.price) -
+                            Number(row?.Service?.benefit)}{" "}
+                          ֏
+                        </TableCell>{" "}
                         {role === "admin" && (
                           <TableCell component="th" scope="row" align="left">
                             <Button

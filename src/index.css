@@ -127,8 +127,13 @@ body {
   font-size: 25px;
 }
 
-.clone_btn{
+.clone_btn {
   position: absolute;
-  right:10%;
-  top:5%;
+  right: 10%;
+  top: 5%;
+}
+
+.MuiTableCell-root,
+.MuiTableRow-root {
+  font-size: 20px !important;
 }

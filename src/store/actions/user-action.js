@@ -84,8 +84,6 @@ export const deleteUser = (data) => {
           });
         } else
           Swal.fire({
-            position: "center",
-            iconColor: "#1d37de",
             icon: "success",
             showConfirmButton: false,
             timer: 1500,
@@ -113,8 +111,6 @@ export const addUser = (data) => {
           });
         } else
           Swal.fire({
-            position: "center",
-            iconColor: "#1d37de",
             icon: "success",
             showConfirmButton: false,
             timer: 1500,
@@ -169,8 +165,6 @@ export const deleteService = (data) => {
           });
         } else
           Swal.fire({
-            position: "center",
-            iconColor: "#1d37de",
             icon: "success",
             showConfirmButton: false,
             timer: 1500,
@@ -198,8 +192,6 @@ export const editService = (data) => {
           });
         } else
           Swal.fire({
-            position: "center",
-            iconColor: "#1d37de",
             icon: "success",
             showConfirmButton: false,
             timer: 1500,
@@ -227,8 +219,6 @@ export const addService = (data) => {
           });
         } else
           Swal.fire({
-            position: "center",
-            iconColor: "#1d37de",
             icon: "success",
             showConfirmButton: false,
             timer: 1500,
@@ -259,8 +249,6 @@ export const dengerDelete = () => {
           });
         } else
           Swal.fire({
-            position: "center",
-            iconColor: "#1d37de",
             icon: "success",
             showConfirmButton: false,
             timer: 1500,
@@ -334,8 +322,6 @@ export const addWork = (data) => {
           });
         } else
           Swal.fire({
-            position: "center",
-            iconColor: "#1d37de",
             icon: "success",
             showConfirmButton: false,
             timer: 1500,
@@ -365,10 +351,13 @@ export const deleteWork = (data, role) => {
             type: role == "admin" ? DELETE_WORKS : DELETE_ACCESS_WORKS,
             payload: data,
           });
+          Swal.fire({
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         } else
           Swal.fire({
-            position: "center",
-            iconColor: "#1d37de",
             icon: "success",
             showConfirmButton: false,
             timer: 1500,
@@ -398,6 +387,25 @@ export const getAccessWorks = (data) => {
         });
       })
       .catch((error) => {
+        console.error(error);
+      });
+  };
+};
+
+export const changeAccessedWork = (data) => {
+  return (dispatch) => {
+    axios
+      .post(
+        `${keys.api}/user/change-access-work`,
+        { id: data },
+        {
+          headers: {
+            Authorization: `Bearer ${keys.token}`,
+          },
+        }
+      )
+      .then(function (response) {})
+      .catch(function (error) {
         console.error(error);
       });
   };

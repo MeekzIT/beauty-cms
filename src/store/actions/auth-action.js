@@ -33,14 +33,11 @@ export const loginAction = (data) => {
           );
           window.location.href = HOME_PAGE;
         } else
-          Swal.fire({
-            position: "center",
-            iconColor: "#1d37de",
-            icon: "error",
-            showConfirmButton: false,
-            timer: 1500,
-            title: "Неправильные Данные",
-          });
+        Swal.fire({
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       })
       .catch(function (error) {
         console.error(error);
@@ -152,8 +149,6 @@ export const editAdmin = (data) => {
       .then(function (response) {
         if (response.data.succes) {
           Swal.fire({
-            position: "center",
-            iconColor: "#1d37de",
             icon: "success",
             showConfirmButton: false,
             timer: 1500,

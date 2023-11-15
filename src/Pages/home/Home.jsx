@@ -77,7 +77,7 @@ const Home = () => {
                 variant="outlined"
                 onClick={() => navigate(ALL_WORK_PAGE)}
               >
-                Աշխատանք
+                Ծառայություններ
               </Button>
             </Box>
             <Box>
@@ -106,9 +106,7 @@ const Home = () => {
               variant="outlined"
               onClick={() => navigate(CATEGORIES_PAGE)}
             >
-              <Typography gutterBottom variant="h5" component="div">
-                Կատեգորիաներ
-              </Typography>
+              Կատեգորիաներ
             </Button>
           </Box>
         )}
@@ -168,31 +166,41 @@ const Home = () => {
                       </Typography>
                     </CardContent>
                     {role == "superAdmin" && (
-                      <CardActions
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "10px",
-                        }}
-                      >
-                        <Button
-                          fullWidth
-                          variant="outlined"
-                          onClick={() => {
-                            navigate(`/user/${row.id}`);
+                      <>
+                        <CardActions
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "10px",
                           }}
                         >
-                          <VisibilityIcon /> Ծառայություններ
-                        </Button>
-                        <Button
-                          fullWidth
-                          color="error"
-                          variant="outlined"
-                          onClick={() => dispatch(deleteUser(row.id))}
+                          <Button
+                            variant="outlined"
+                            onClick={() => {
+                              navigate(`/user/${row.id}`);
+                            }}
+                            sx={{ width: "200px" }}
+                          >
+                            <VisibilityIcon /> Ծառայություններ
+                          </Button>
+                        </CardActions>
+                        <CardActions
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "10px",
+                          }}
                         >
-                          <DeleteIcon sx={{ color: "red" }} />
-                        </Button>
-                      </CardActions>
+                          <Button
+                            color="error"
+                            variant="outlined"
+                            onClick={() => dispatch(deleteUser(row.id))}
+                            sx={{ width: "200px" }}
+                          >
+                            <DeleteIcon sx={{ color: "red" }} />
+                          </Button>
+                        </CardActions>
+                      </>
                     )}
                   </Card>
                 ))}

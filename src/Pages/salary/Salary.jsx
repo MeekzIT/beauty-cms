@@ -208,21 +208,23 @@ const Salary = () => {
           )}
         </Box>
       </Box>
+      <hr />
       <Box
         p={2}
         sx={{
           display: "flex",
-          justifyContent: "flex-end",
         }}
       >
         <Box>
-          <h3>Արդյունքներ</h3>
-          <Typography component="h3">Ամբողջական - {calc?.all} ֏</Typography>
-          <Typography component="h3">Օգուտ - {calc?.cantora} ֏</Typography>
-          <Typography component="h3">Աշխատավարձ - {calc?.benefit} ֏</Typography>
+          <h1>Արդյունքներ</h1>
+          <h3>Ամբողջական - {calc?.all} ֏</h3>
+          <h3>Օգուտ - {calc?.cantora} ֏</h3>
+          <h3>Աշխատավարձ - {calc?.benefit} ֏</h3>
         </Box>
       </Box>
-      <Box sx={{ overflow: "auto" }}>
+      <hr />
+
+      <Box sx={{ overflow: "auto", marginBottom: "100px" }}>
         <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">

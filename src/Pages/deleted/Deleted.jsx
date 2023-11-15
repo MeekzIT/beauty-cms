@@ -63,12 +63,14 @@ const Deleted = () => {
           </Button>
         </Box>
       </Box>
-      <Box sx={{ overflow: "auto" }}>
+      <Box sx={{ overflow: "auto", marginBottom: "100px" }}>
         <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
+                    <TableCell align="left">Աշխատող</TableCell>
+
                   <TableCell align="left">Աշխատանքի տեսակը</TableCell>
                   <TableCell align="left">Գին</TableCell>
                   <TableCell align="left">Աշխատողի աշխատանքը</TableCell>
@@ -85,6 +87,9 @@ const Deleted = () => {
                         "&:last-child td, &:last-child th": { border: 0 },
                       }}
                     >
+                      <TableCell component="th" scope="row" align="left">
+                        {row?.Service?.User?.name}
+                      </TableCell>
                       <TableCell component="th" scope="row" align="left">
                         {row?.Service?.name}
                       </TableCell>
