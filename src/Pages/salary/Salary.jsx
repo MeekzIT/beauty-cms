@@ -8,60 +8,38 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
-  addWork,
-  deleteService,
   deleteWork,
   getResults,
-  getServices,
-  getUser,
   getUsers,
   getWorks,
 } from "../../store/actions/user-action";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Services from "../../components/sercvices/Services";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { HOME_PAGE } from "../../routing/pats";
-import AddIcon from "@mui/icons-material/Add";
-import AddServices from "../../components/addsercvices/AddServices";
 import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import CalculateIcon from "@mui/icons-material/Calculate";
-import Results from "../../components/results/Results";
 import { getMe } from "../../store/actions/auth-action";
-import AddWork from "../../components/addWork/AddWork";
 import dayjs from "dayjs";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import Swal from "sweetalert2";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { MonthCalendar } from "@mui/x-date-pickers";
 
 const Salary = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [current, setCurrent] = useState(null);
-  const [arxive, setArxive] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [add, setSetAdd] = useState(false);
+  // const formattedDate = dayjs()?.format("YYYY-MM-DD");
   const [user, setUser] = useState();
   const firstDayOfMonth = dayjs().startOf("month");
   const lastDayOfMonth = dayjs().endOf("month");
   const [value, setValue] = useState();
+  const [access, setAccess] = useState(false);
   const [month, setMonth] = useState(null);
   const [monthly, setMontly] = useState(false);
-  const handleOpen = () => setOpen(true);
   const data = useSelector((state) => state.users.work);
   const role = useSelector((state) => state.auth.isSuper);
   const services = useSelector((state) => state.users.services);
@@ -81,7 +59,7 @@ const Salary = () => {
         date: value,
       })
     );
-  }, [user, value]);
+  }, [dispatch, user, value]);
 
   useEffect(() => {
     dispatch(getUsers());
@@ -202,10 +180,23 @@ const Salary = () => {
 
         <Box>
           {value && (
-            <Button variant="outlined" onClick={() => setValue(null)}>
-              <FilterAltOffIcon /> Ջնջել ամսաթվի ֆիլտրը
+            <Button
+              variant="outlined"
+              onClick={() => setValue(null)}
+              color="error"
+            >
+              <FilterAltOffIcon sx={{ color: "red" }} /> Ջնջել ամսաթվի ֆիլտրը
             </Button>
           )}
+        </Box>
+        <Box>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => setAccess(!access)}
+          >
+            <DeleteIcon /> {access ? "ետ" : "Ջնջել"}
+          </Button>
         </Box>
       </Box>
       <hr />
@@ -230,10 +221,18 @@ const Salary = () => {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell align="left">Աշխատանքի տեսակը</TableCell>
+                  {/* <TableCell align="left">Աշխատանքի տեսակը</TableCell>
                   <TableCell align="left">Գին</TableCell>
                   <TableCell align="left">Աշխատողի աշխատանքը</TableCell>
+                  <TableCell align="left">Ամսաթիվ</TableCell> */}
+
+                  <TableCell align="left">Աշխատող</TableCell>
+                  <TableCell align="left">Աշխատանքի տեսակը</TableCell>
                   <TableCell align="left">Ամսաթիվ</TableCell>
+                  <TableCell align="left">Գին</TableCell>
+                  <TableCell align="left">Աշխատավարձ</TableCell>
+                  <TableCell align="left">Օգուտ</TableCell>
+                  {access && <TableCell align="left">Ջնջել</TableCell>}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -245,7 +244,7 @@ const Salary = () => {
                         "&:last-child td, &:last-child th": { border: 0 },
                       }}
                     >
-                      <TableCell component="th" scope="row" align="left">
+                      {/* <TableCell component="th" scope="row" align="left">
                         {row?.Service?.name}
                       </TableCell>
                       <TableCell component="th" scope="row" align="left">
@@ -257,7 +256,39 @@ const Salary = () => {
                       <TableCell component="th" scope="row" align="left">
                         {row.createdAt.slice(0, 10)}{" "}
                         {row.createdAt.slice(11, 16)}
+                      </TableCell> */}
+                      <TableCell component="th" scope="row" align="left">
+                        {row?.Service?.User?.name}
                       </TableCell>
+                      <TableCell component="th" scope="row" align="left">
+                        {row?.Service?.name}
+                      </TableCell>
+                      <TableCell component="th" scope="row" align="left">
+                        {row.createdAt.slice(0, 10)}{" "}
+                        {row.createdAt.slice(11, 16)}
+                      </TableCell>
+                      <TableCell component="th" scope="row" align="left">
+                        {row?.Service?.price} ֏
+                      </TableCell>{" "}
+                      <TableCell component="th" scope="row" align="left">
+                        {row?.Service?.benefit} ֏
+                      </TableCell>{" "}
+                      <TableCell component="th" scope="row" align="left">
+                        {Number(row?.Service?.price) -
+                          Number(row?.Service?.benefit)}{" "}
+                        ֏
+                      </TableCell>{" "}
+                      {access && (
+                        <TableCell component="th" scope="row" align="left">
+                          <Button
+                            variant="outlined"
+                            color="error"
+                            onClick={() => dispatch(deleteWork(row.id, role))}
+                          >
+                            <DeleteIcon sx={{ color: "red" }} />
+                          </Button>
+                        </TableCell>
+                      )}
                     </TableRow>
                   ))
                 ) : (

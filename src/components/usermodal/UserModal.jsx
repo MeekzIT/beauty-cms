@@ -30,7 +30,10 @@ const UserModal = ({ open, setClose, type }) => {
   return (
     <Modal
       open={open}
-      onClose={() => setClose(false)}
+      onClose={() => {
+        setClose(false);
+        setName("");
+      }}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -60,8 +63,12 @@ const UserModal = ({ open, setClose, type }) => {
             onClick={() => {
               if (name !== "") {
                 dispatch(addUser({ name: name, type }));
+                setName("");
                 setClose(false);
                 dispatch(getCategory());
+                setTimeout(() => {
+                  dispatch(getCategory());
+                }, "1000");
               }
             }}
           >

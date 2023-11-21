@@ -75,7 +75,7 @@ const Services = ({ open, setClose, data }) => {
         </Box>
         <Box mt={2}>
           <TextField
-            label="Աշխատողի աշխատանքը"
+            label="Աշխատավարձ"
             variant="outlined"
             value={benefit}
             onChange={(e) => setBenefit(e.target.value)}

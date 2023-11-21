@@ -158,3 +158,20 @@ span {
     padding: 0 10px;
   }
 }
+
+.footerBox {
+  width: 100%;
+  background: #2C2125;
+  padding: 5px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.footerBox a {
+  color: white;
+  text-decoration: none;
+}

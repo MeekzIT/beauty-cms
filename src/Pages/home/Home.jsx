@@ -54,7 +54,7 @@ const Home = () => {
     dispatch(getCategory());
   }, []);
   return (
-    <Box component={Paper}>
+    <Box component={Paper} sx={{ minHeight: "100vh" }}>
       <Box
         p={2}
         sx={{
@@ -72,14 +72,14 @@ const Home = () => {
           </Box>
         ) : (
           <>
-            <Box>
+            {/* <Box>
               <Button
                 variant="outlined"
                 onClick={() => navigate(ALL_WORK_PAGE)}
               >
                 Ծառայություններ
               </Button>
-            </Box>
+            </Box> */}
             <Box>
               <Button variant="outlined" onClick={() => navigate(SALARY_PAGE)}>
                 <CalculateIcon /> Դիտել արդյունքները
@@ -194,7 +194,13 @@ const Home = () => {
                           <Button
                             color="error"
                             variant="outlined"
-                            onClick={() => dispatch(deleteUser(row.id))}
+                            onClick={() => {
+                              dispatch(deleteUser(row.id));
+                              dispatch(getCategory());
+                              setTimeout(() => {
+                                dispatch(getCategory());
+                              }, "1000");
+                            }}
                             sx={{ width: "200px" }}
                           >
                             <DeleteIcon sx={{ color: "red" }} />

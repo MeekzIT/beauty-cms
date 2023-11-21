@@ -18,7 +18,7 @@ import { useIsMobile } from "../../hooks/useScreenType";
 import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
 
-const AddWork = ({ open, setClose, current, setCurrent }) => {
+const AddWork = ({ open, setClose, current, setCurrent, category }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const isMobile = useIsMobile();
@@ -34,7 +34,7 @@ const AddWork = ({ open, setClose, current, setCurrent }) => {
     boxShadow: 24,
     p: 4,
   };
-
+  console.log(category, "category");
   useEffect(() => {
     const handleKeyPress = (event) => {
       if (event.key === "Enter") {
@@ -82,7 +82,7 @@ const AddWork = ({ open, setClose, current, setCurrent }) => {
           <CloseIcon />
         </div>
         <Typography p={2} id="modal-modal-title" variant="h6" component="h2">
-          Ավելացնել աշխատանք
+          {category?.name} - {category?.price} ֏
         </Typography>
 
         <Box mt={2} p={2}>

@@ -86,7 +86,7 @@ const User = () => {
           </Box>
         )}
       </Box>
-      <Box sx={{ overflow: "auto" , marginBottom: "100px" }}>
+      <Box sx={{ overflow: "auto", marginBottom: "100px" }}>
         <Box sx={{ width: "100%", display: "table", tableLayout: "fixed" }}>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -94,7 +94,7 @@ const User = () => {
                 <TableRow>
                   <TableCell align="left">Անուն</TableCell>
                   <TableCell align="left">Գին</TableCell>
-                  <TableCell align="left">Աշխատողի աշխատանքը</TableCell>
+                  <TableCell align="left">Աշխատավարձ</TableCell>
                   <TableCell align="left">Ամսաթիվ</TableCell>
                   {role === "superAdmin" && (
                     <TableCell align="left">Խմբագրել</TableCell>
@@ -143,6 +143,7 @@ const User = () => {
                         <TableCell component="th" scope="row" align="left">
                           <Button
                             variant="outlined"
+                            color="error"
                             onClick={() => dispatch(deleteService(row.id))}
                           >
                             <DeleteIcon />

@@ -60,6 +60,7 @@ const Settings = () => {
         display: "flex",
         justifyContent: "space-around",
         flexWrap: "wrap",
+        minHeight: "100vh",
       }}
     >
       <Box sx={{ display: "flex", flexDirection: "column" }}>

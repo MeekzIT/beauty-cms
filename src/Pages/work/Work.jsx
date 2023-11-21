@@ -53,6 +53,7 @@ const Work = () => {
   const firstDayOfMonth = dayjs().startOf("month");
   const lastDayOfMonth = dayjs().endOf("month");
   const [value, setValue] = useState();
+  const [category, setCategory] = useState();
   const handleOpen = () => setOpen(true);
   const data = useSelector((state) => state.users.work);
   const role = useSelector((state) => state.auth.isSuper);
@@ -86,7 +87,7 @@ const Work = () => {
   }, []);
 
   return (
-    <Box component={Paper}>
+    <Box component={Paper} sx={{ minHeight: "100vh" }}>
       <Box p={2}>
         <h1>Աշխատանքներ` {user?.name}</h1>
       </Box>
@@ -107,7 +108,7 @@ const Work = () => {
             </Button>
           </Box>
         )}
-        <Box>
+        {/* <Box>
           <Button
             variant="outlined"
             onClick={() => {
@@ -117,7 +118,7 @@ const Work = () => {
           >
             {arxive ? "Վերադառնալ" : "Դիտել արխիվը"}
           </Button>
-        </Box>
+        </Box> */}
         {/* {role === "admin" && !arxive && (
           <Box>
             <Button variant="outlined" onClick={() => setSetAdd(true)}>
@@ -167,7 +168,7 @@ const Work = () => {
                     <TableCell align="left">Աշխատանքի տեսակը</TableCell>
                     <TableCell align="left">Ամսաթիվ</TableCell>
                     <TableCell align="left">Գին</TableCell>
-                    <TableCell align="left">Աշխատողի աշխատանքը</TableCell>
+                    <TableCell align="left">Աշխատավարձ</TableCell>
                     <TableCell align="left">Օգուտ</TableCell>
                     {role === "admin" && (
                       <TableCell align="left">Ջնջել</TableCell>
@@ -208,6 +209,7 @@ const Work = () => {
                           <TableCell component="th" scope="row" align="left">
                             <Button
                               variant="outlined"
+                              color="error"
                               onClick={() => dispatch(deleteWork(row.id, role))}
                             >
                               <DeleteIcon sx={{ color: "red" }} />
@@ -261,12 +263,16 @@ const Work = () => {
               }}
               onClick={() => {
                 setCurrent(row.id);
+                setCategory(row);
                 setSetAdd(true);
               }}
             >
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
                   {row?.name}
+                </Typography>
+                <Typography gutterBottom variant="h5" component="div">
+                  {row?.price} ֏
                 </Typography>
               </CardContent>
             </Card>
@@ -305,6 +311,7 @@ const Work = () => {
         open={add}
         setClose={setSetAdd}
         current={current}
+        category={category}
         setCurrent={setCurrent}
       />
       <Results open={results} setClose={setResults} all={false} />

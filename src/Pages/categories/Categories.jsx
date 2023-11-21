@@ -31,7 +31,7 @@ const Categories = () => {
   }, []);
 
   return (
-    <Box component={Paper}>
+    <Box component={Paper} sx={{ minHeight: "100vh" }}>
       <Box p={2}>
         <h1>կատեգորիա</h1>
       </Box>
@@ -84,6 +84,7 @@ const Categories = () => {
                       <TableCell component="th" scope="row" align="left">
                         <Button
                           variant="outlined"
+                          color="error"
                           onClick={() => dispatch(deleteCategory(row.id))}
                         >
                           <DeleteIcon sx={{ color: "red" }} />

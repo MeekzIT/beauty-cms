@@ -72,7 +72,7 @@ const AddServices = ({ open, setClose }) => {
         </Box>
         <Box mt={2} p={2}>
           <TextField
-            label="Աշխատողի աշխատանքը"
+            label="Աշխատավարձ"
             variant="outlined"
             value={benefit}
             onChange={(e) => setBenefit(e.target.value)}

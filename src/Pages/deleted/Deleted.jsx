@@ -69,11 +69,11 @@ const Deleted = () => {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                    <TableCell align="left">Աշխատող</TableCell>
+                  <TableCell align="left">Աշխատող</TableCell>
 
                   <TableCell align="left">Աշխատանքի տեսակը</TableCell>
                   <TableCell align="left">Գին</TableCell>
-                  <TableCell align="left">Աշխատողի աշխատանքը</TableCell>
+                  <TableCell align="left">Աշխատավարձ</TableCell>
                   <TableCell align="left">Ամսաթիվ</TableCell>
                   <TableCell align="left">Ջնջել</TableCell>
                 </TableRow>
@@ -106,6 +106,7 @@ const Deleted = () => {
                       <TableCell component="th" scope="row" align="left">
                         <Button
                           variant="outlined"
+                          color="error"
                           onClick={() => dispatch(deleteWork(row.id, role))}
                         >
                           <DeleteIcon sx={{ color: "red" }} />

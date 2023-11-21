@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { Box } from "@mui/material";
 
 import "./layout.css";
+import Footer from "../footer/Footer";
 
 export default function MainLayout() {
   const isMobile = useIsMobile();
@@ -36,6 +37,7 @@ export default function MainLayout() {
                 })}
           </Routes>
         </Box>
+        <Box>{auth && <Footer />}</Box>
       </div>
     </div>
   );
