@@ -3,12 +3,13 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../store/actions/user-action";
 import { useIsMobile } from "../../hooks/useScreenType";
 import CloseIcon from "@mui/icons-material/Close";
 import { addCategory, getCategory } from "../../store/actions/category-action";
+import Swal from "sweetalert2";
 
 const AddCategory = ({ open, setClose }) => {
   const dispatch = useDispatch();
@@ -27,6 +28,26 @@ const AddCategory = ({ open, setClose }) => {
     boxShadow: 24,
     p: 4,
   };
+
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key == "Enter") {
+        if (name !== "") {
+          dispatch(addCategory({ name: name }));
+          setClose(false);
+          dispatch(getCategory());
+        }
+        setClose(false);
+      }
+    }; // Add event listener to the document
+    document.addEventListener("keydown", handleKeyPress);
+
+    // Cleanup: Remove event listener when the component unmounts
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, []);
+
   return (
     <Modal
       open={open}

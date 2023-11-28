@@ -3,12 +3,13 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addService } from "../../store/actions/user-action";
 import { useParams } from "react-router-dom";
 import { useIsMobile } from "../../hooks/useScreenType";
 import CloseIcon from "@mui/icons-material/Close";
+import Swal from "sweetalert2";
 
 const AddServices = ({ open, setClose }) => {
   const { id } = useParams();
@@ -30,6 +31,38 @@ const AddServices = ({ open, setClose }) => {
     boxShadow: 24,
     p: 4,
   };
+
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key == "Enter") {
+        if (name !== "" && price !== "" && benefit !== "") {
+          dispatch(
+            addService({
+              userId: id,
+              name,
+              price,
+              benefit,
+            })
+          );
+          setName("");
+          setPrice("");
+          setBenefit("");
+          setClose(false);
+          setClose(false);
+        }
+  
+      }
+    };
+
+    // Add event listener to the document
+    document.addEventListener("keydown", handleKeyPress);
+
+    // Cleanup: Remove event listener when the component unmounts
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, []);
+
   return (
     <Modal
       open={open}
@@ -91,6 +124,9 @@ const AddServices = ({ open, setClose }) => {
                     benefit,
                   })
                 );
+                setName("");
+                setPrice("");
+                setBenefit("");
                 setClose(false);
               }
             }}

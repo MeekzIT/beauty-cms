@@ -37,7 +37,7 @@ const AddWork = ({ open, setClose, current, setCurrent, category }) => {
   console.log(category, "category");
   useEffect(() => {
     const handleKeyPress = (event) => {
-      if (event.key === "Enter") {
+      if (event.key == "Enter") {
         dispatch(
           addWork({
             userId: id,
@@ -46,11 +46,6 @@ const AddWork = ({ open, setClose, current, setCurrent, category }) => {
         );
         setCurrent(null);
         setClose(false);
-        Swal.fire({
-          icon: "success",
-          showConfirmButton: false,
-          timer: 1500,
-        });
       }
     };
 
@@ -97,11 +92,6 @@ const AddWork = ({ open, setClose, current, setCurrent, category }) => {
               );
               setCurrent(null);
               setClose(false);
-              Swal.fire({
-                icon: "success",
-                showConfirmButton: false,
-                timer: 1500,
-              });
             }}
           >
             Հաստատել

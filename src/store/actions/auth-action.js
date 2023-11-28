@@ -32,12 +32,18 @@ export const loginAction = (data) => {
             JSON.stringify(response.data.data.token)
           );
           window.location.href = HOME_PAGE;
+          Swal.fire({
+            title: "Good job!",
+            text: "You clicked the button!",
+            icon: "success",
+          });
         } else
-        Swal.fire({
-          icon: "success",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            showConfirmButton: false,
+            timer: 1500,
+          });
       })
       .catch(function (error) {
         console.error(error);

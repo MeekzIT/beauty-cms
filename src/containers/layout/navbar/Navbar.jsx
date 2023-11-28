@@ -19,6 +19,7 @@ import {
 } from "../../../store/actions/user-action";
 import { Button } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 
 const Navbar = ({ close, setClose }) => {
   const dispatch = useDispatch();
@@ -72,6 +73,34 @@ const Navbar = ({ close, setClose }) => {
               </Button>
             </div>
           )}
+          <div className="item">
+            {data?.length > 0 && role == "superAdmin" && (
+              <Button
+                variant="outlined"
+                sx={{
+                  // background: "white",
+                  color: "white",
+                  "&:hover": {
+                    color: "#2C2125",
+                    backgroundColor: "white",
+                  },
+                }}
+                onClick={() => navigate(DELETED_PAGE)}
+              >
+                <NotificationsIcon />
+                <span
+                  style={{
+                    fontSize: "10px",
+                    position: "absolute",
+                    top: "2px",
+                    right: "10px",
+                  }}
+                >
+                  {data?.length}
+                </span>
+              </Button>
+            )}
+          </div>
           {isAuth && (
             <div className="item">
               <h2 style={{ color: "white" }}>
@@ -79,24 +108,7 @@ const Navbar = ({ close, setClose }) => {
               </h2>
             </div>
           )}
-          <div className="item">
-            {data?.length > 0 && role == "superAdmin" && (
-              <Button
-                variant="contained"
-                sx={{
-                  background: "white",
-                  color: "red",
-                  "&:hover": {
-                    color: "#1d37de",
-                    backgroundColor: "white",
-                  },
-                }}
-                onClick={() => navigate(DELETED_PAGE)}
-              >
-                Դուք ունեք նոր ջնջված տվյալ
-              </Button>
-            )}
-          </div>
+
           {data?.length > 0 && role == "admin" && (
             <div className="item">
               <Button
