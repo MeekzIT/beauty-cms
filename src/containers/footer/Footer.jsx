@@ -8,7 +8,7 @@ const Footer = () => {
     <div className="footerBox">
       <CopyrightIcon />
       <a href="https://createfuturesoftware.com/en" target="_blanc">
-        Createfuture Software {year}
+        Create Future Software {year}
       </a>
     </div>
   );

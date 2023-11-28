@@ -251,13 +251,13 @@ const Work = () => {
               sx={{
                 width: 300,
                 padding: "10px",
-                backgroundColor: "whitesmoke",
+                backgroundColor: "#2C2125",
+                color: "white",
                 cursor: "pointer",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                backgroundColor:
-                  current == row.id ? "greenyellow" : "whitesmoke",
+                backgroundColor: current == row.id ? "greenyellow" : "#2C2125",
                 cursor: "pointer",
                 flexDirection: "column",
               }}

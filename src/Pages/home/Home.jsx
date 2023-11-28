@@ -149,7 +149,8 @@ const Home = () => {
                     sx={{
                       width: 300,
                       padding: "10px",
-                      backgroundColor: "whitesmoke",
+                      backgroundColor: "#2C2125",
+                      color: "white",
                       cursor: "pointer",
                       display: "flex",
                       flexDirection: "column",
@@ -179,7 +180,17 @@ const Home = () => {
                             onClick={() => {
                               navigate(`/user/${row.id}`);
                             }}
-                            sx={{ width: "200px" }}
+                            sx={{
+                              width: "200px",
+                              background: "white",
+                              color: "#2C2125",
+                              "&:hover": {
+                                width: "210px",
+                                color: "#2C2125",
+                                backgroundColor: "white",
+                                transition: ".5s",
+                              },
+                            }}
                           >
                             <VisibilityIcon /> Ծառայություններ
                           </Button>
