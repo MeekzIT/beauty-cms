@@ -87,13 +87,14 @@ const Navbar = ({ close, setClose }) => {
                 }}
                 onClick={() => navigate(DELETED_PAGE)}
               >
-                <NotificationsIcon />
+                <NotificationsIcon sx={{ color: "red" }} />
                 <span
                   style={{
                     fontSize: "10px",
                     position: "absolute",
                     top: "2px",
                     right: "10px",
+                    color: "red",
                   }}
                 >
                   {data?.length}

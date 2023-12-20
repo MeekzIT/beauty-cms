@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  changeAccessedWork,
   deleteUser,
   deleteWork,
   dengerDelete,
@@ -33,7 +34,6 @@ const Deleted = () => {
   const [open, setOpen] = useState(false);
   const [results, setResults] = useState(false);
 
-  const handleOpen = () => setOpen(true);
   const data = useSelector((state) => state.users.accessWorks);
   const role = useSelector((state) => state.auth.isSuper);
 
@@ -75,6 +75,7 @@ const Deleted = () => {
                   <TableCell align="left">Գին</TableCell>
                   <TableCell align="left">Աշխատավարձ</TableCell>
                   <TableCell align="left">Ամսաթիվ</TableCell>
+                  <TableCell align="left">վերադարձնել</TableCell>
                   <TableCell align="left">Ջնջել</TableCell>
                 </TableRow>
               </TableHead>
@@ -102,6 +103,19 @@ const Deleted = () => {
                       <TableCell component="th" scope="row" align="left">
                         {row.createdAt.slice(0, 10)}{" "}
                         {row.createdAt.slice(11, 16)}
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          onClick={() => {
+                            dispatch(changeAccessedWork(row.id));
+                            setTimeout(() => {
+                              dispatch(getAccessWorks());
+                            }, "1000");
+                          }}
+                        >
+                          վերադարձնել
+                        </Button>
                       </TableCell>
                       <TableCell component="th" scope="row" align="left">
                         <Button
